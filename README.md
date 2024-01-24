@@ -3,19 +3,19 @@
 ## stream-quality-report
 - get-all
   - query: null
-  - return: Response
+  - return: StreamQualityReportResponse
 - get-by-region
   - query: region
-  - return: Response
+  - return: StreamQualityReportResponse
 - get-by-stream-type
   - query: type
-  - return: Response
+  - return: StreamQualityReportResponse
 - get-by-region-and-stream-type
   - query: region, type
-  - return: Response
+  - return: StreamQualityReportResponse
 - get-by-channel
   - query: channel
-  - return: Response
+  - return: StreamQualityReportResponse
 
 
 ### structure
@@ -39,7 +39,7 @@ struct Topia {
 - channel: 桌號，例如: BTCB02。
 - topiq_nr: 待補充。
 - topiq_nr-flive: 待補充。
-- topiq_nr-sppqa: 待補充。
+- topiq_nr-spqa: 待補充。
 - timestamp: 時間戳
 
 ---
@@ -52,7 +52,7 @@ struct TopiqResponse {
     nr_list: number[]; //limit 50
     nr_flive_list: number[]; //limit 50
     nr_spaq_list: number[]; //limit 50
-    timestamp: number[] //limit 50
+    timestamp_list: number[] //limit 50
 }
 ```
 
