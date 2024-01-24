@@ -14,7 +14,7 @@ class StreamQualityService {
 
     async HandleCronJob() {
         const promises = CONFIGURATION.STREAM_LIST.map((stream) => {
-            return axios.post('http://localhost:3000/stream-quality-report/calculate_topiq', {
+            return axios.post(stream.server, {
                 url: stream.url,
                 duration: 3,
                 region: stream.region,
