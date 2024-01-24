@@ -1,6 +1,7 @@
 var express = require('express')
 var router = express.Router()
 var ERRORCODE = require('../public/javascripts/errorcode').STREAM_QUALITY_REPORT
+var mongoDBInstance = require('../public/javascripts/mongodb')
 
 function handleSuccess(res, data) {
     res.send({
@@ -25,7 +26,7 @@ function handleError(res, error) {
 
 router.get('/get-all', async (req, res) => {
     try {
-        const result = await req.app.locals.collection.find().toArray()
+        const result = await mongoDBInstance.GetAll()
 
         handleSuccess(res, result)
     } catch (error) {
@@ -42,9 +43,7 @@ router.get('/get-by-region', async (req, res) => {
             return
         }
 
-        const result = await req.app.locals.collection
-            .find({ region: { $eq: queryRegion } })
-            .toArray()
+        const result = await mongoDBInstance.GetByRegion(queryRegion)
 
         handleSuccess(res, result)
     } catch (error) {
@@ -61,9 +60,7 @@ router.get('/get-by-stream-type', async (req, res) => {
             return
         }
 
-        const result = await req.app.locals.collection
-            .find({ type: { $eq: queryStreamType } })
-            .toArray()
+        const result = await mongoDBInstance.GetByStreamType(queryStreamType)
 
         handleSuccess(res, result)
     } catch (error) {
@@ -95,12 +92,7 @@ router.get('/get-by-region-and-stream-type', async (req, res) => {
             return
         }
 
-        const result = await req.app.locals.collection
-            .find({
-                region: { $eq: queryRegion },
-                type: { $eq: queryStringType }
-            })
-            .toArray()
+        const result = await mongoDBInstance.GetByRegionAndStreamType(queryRegion, queryStringType)
 
         handleSuccess(res, result)
     } catch (error) {
@@ -117,11 +109,7 @@ router.get('/get-by-channel', async (req, res) => {
             return
         }
 
-        const result = await req.app.locals.collection
-            .find({
-                channel: { $eq: queryChannel }
-            })
-            .toArray()
+        const result = await mongoDBInstance.GetByChannel(queryChannel)
 
         handleSuccess(res, result)
     } catch (error) {
@@ -138,9 +126,7 @@ router.post('/record-topiq-list', async (req, res) => {
             return;
         }
         
-        // await req.locals.collection
-        //     .insertMany(topiqList);
-
+        mongoDBInstance.RecordTopiqList(topiqList)
     } catch (error) {
         handleError(res, error)
     }

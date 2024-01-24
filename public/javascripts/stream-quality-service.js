@@ -65,10 +65,9 @@ class StreamQualityService {
     }
 
     recordTopiqList(topiqList) {
-        console.log('recordTopiqList:', topiqList)
-        // axios.post('http://localhost:3000/stream-quality-report/record-topiq-list', {
-        //     topiqList: topiqList
-        // })
+        axios.post('http://localhost:3000/stream-quality-report/record-topiq-list', {
+            topiqList: topiqList
+        })
     }
 
     Close() {
