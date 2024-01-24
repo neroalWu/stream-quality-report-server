@@ -129,4 +129,29 @@ router.get('/get-by-channel', async (req, res) => {
     }
 })
 
+router.post('/record-topiq-list', async (req, res) => {
+    try {
+        const topiqList = req.body.topiqList;
+
+        if (!topiqList || topiqList.length == 0) {
+            handleError(res, "invalid topiqList");
+            return;
+        }
+        
+        // await req.locals.collection
+        //     .insertMany(topiqList);
+
+    } catch (error) {
+        handleError(res, error)
+    }
+})
+
+router.post('/calculate_topiq', (req, res) => {
+    res.send({
+        topiq_nr: Math.random(),
+        'topiq_nr-flive': Math.random(),
+        'topiq_nr-spaq': Math.random()
+    })
+})
+
 module.exports = router

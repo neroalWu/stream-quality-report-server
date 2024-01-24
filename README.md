@@ -46,6 +46,7 @@ struct Topiq {
     topiq_nr: number,
     topiq_nr-flive: number,
     topiq_nr-spaq: number
+    timestamp: 時間戳
 }
 ```
 
@@ -55,4 +56,5 @@ struct Topiq {
 - topiq_nr: 待補充。
 - topiq_nr-flive: 待補充。
 - topiq_nr-sppqa: 待補充。
+- timestamp: 時間戳
 

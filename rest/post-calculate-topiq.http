@@ -1,0 +1,8 @@
+@host = http://localhost:3000/stream-quality-report
+POST {{host}}/calculate_topiq
+Content-Type: application/json
+
+{
+    "url": "rtmp://10.22.1.201/cb/BTCB02",
+    "duration": 3
+}
