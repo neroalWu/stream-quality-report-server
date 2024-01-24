@@ -3,8 +3,6 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-var connectToMongoDB = require('./public/javascripts/mongodb')
-var initializeStreamQualityService = require('./public/javascripts/stream-quality-service')
 
 var indexRouter = require('./routes/index');
 var streamQualtiyReportRouter = require('./routes/stream-quality-report-router')
@@ -20,8 +18,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(connectToMongoDB)
-app.use(initializeStreamQualityService)
 
 app.use('/', indexRouter);
 app.use('/stream-quality-report', streamQualtiyReportRouter);

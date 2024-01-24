@@ -2,28 +2,20 @@ const cron = require('./cron-job')
 const axios = require('axios').default
 const CONFIGURATION = require('./configuration')
 
-let cronJob = null
-let promises = []
-
-function initializeStreamQualityService(req, res, next) {
-    try {
-        if (cronJob) {
-            cron.StopJob(cronJob)
-        }
-
-        cronJob = cron.StartJob(jobHandler)
-
-        next()
-    } catch (e) {
-        console.error('Error handling initialize stream quality service:', error)
-        res.status(500).json({ error: 'Internal Server Error' })
+class StreamQualityService {
+    constructor() {
+        this.cronJob = null
+        this.promises = []
     }
-}
 
-async function jobHandler() {
-    try {
-        if (promises.length == 0) {
-            promises = CONFIGURATION.STREAM_LIST.map((stream) => {
+    Init() {
+        console.log('Init StreamQualityService')
+        this.cronJob = cron.StartJob(this.HandleCronJob.bind(this))
+    }
+
+    async HandleCronJob() {
+        if (this.promises.length == 0) {
+            this.promises = CONFIGURATION.STREAM_LIST.map((stream) => {
                 return axios.post('http://localhost:3000/stream-quality-report/calculate_topiq', {
                     url: stream.url,
                     duration: 3,
@@ -34,52 +26,55 @@ async function jobHandler() {
             })
         }
 
-        const result = await Promise.all(promises)
-        const topiqList = topiqParser(result)
+        const result = await Promise.all(this.promises)
+        const topiqList = this.topiqParser(result)
 
-        recordTopiqList(topiqList);
-    } catch (error) {
-        console.error(error)
+        this.recordTopiqList(topiqList)
+    }
+
+    topiqParser(result) {
+        const reports = result.map((x) => x.data)
+        const configs = result.map((x) => JSON.parse(x.config.data))
+
+        for (let i = 0; i < reports.length; i++) {
+            const config = configs[i]
+            this.appendRegion(reports[i], config)
+            this.appendStreamType(reports[i], config)
+            this.appendChannel(reports[i], config)
+        }
+
+        return reports
+    }
+
+    appendRegion(topiq, config) {
+        if ('region' in config) {
+            Object.assign(topiq, { region: config.region })
+        }
+    }
+
+    appendStreamType(topiq, config) {
+        if ('type' in config) {
+            Object.assign(topiq, { type: config.type })
+        }
+    }
+
+    appendChannel(topiq, config) {
+        if ('channel' in config) {
+            Object.assign(topiq, { channel: config.channel })
+        }
+    }
+
+    recordTopiqList(topiqList) {
+        console.log('recordTopiqList:', topiqList)
+        // axios.post('http://localhost:3000/stream-quality-report/record-topiq-list', {
+        //     topiqList: topiqList
+        // })
+    }
+
+    Close() {
+        cron.StopJob(this.cronJob)
     }
 }
 
-function topiqParser(result) {
-    const reports = result.map((x) => x.data)
-    const configs = result.map((x) => JSON.parse(x.config.data))
-
-    for (let i = 0; i < reports.length; i++) {
-        const config = configs[i]
-        appendRegion(reports[i], config)
-        appendStreamType(reports[i], config)
-        appendChannel(reports[i], config)
-    }
-
-    return reports;
-}
-
-function appendRegion(topiq, config) {
-    if ('region' in config) {
-        Object.assign(topiq, { region: config.region })
-    }
-}
-
-function appendStreamType(topiq, config) {
-    if ('type' in config) {
-        Object.assign(topiq, { type: config.type })
-    }
-}
-
-function appendChannel(topiq, config) {
-    if ('channel' in config) {
-        Object.assign(topiq, { channel: config.channel })
-    }
-}
-
-function recordTopiqList(topiqList) {
-    console.log('recordTopiqList:', topiqList)
-    // axios.post('http://localhost:3000/stream-quality-report/record-topiq-list', {
-    //     topiqList: topiqList
-    // })
-}
-
-module.exports = initializeStreamQualityService
+const streamQualityServiceInstance = new StreamQualityService()
+module.exports = streamQualityServiceInstance
