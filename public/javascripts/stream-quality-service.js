@@ -5,7 +5,6 @@ const CONFIGURATION = require('./configuration')
 class StreamQualityService {
     constructor() {
         this.cronJob = null
-        this.promises = []
     }
 
     Init() {
@@ -13,20 +12,19 @@ class StreamQualityService {
         this.cronJob = cron.StartJob(this.HandleCronJob.bind(this))
     }
 
-    async HandleCronJob() {
-        if (this.promises.length == 0) {
-            this.promises = CONFIGURATION.STREAM_LIST.map((stream) => {
-                return axios.post('http://localhost:3000/stream-quality-report/calculate_topiq', {
-                    url: stream.url,
-                    duration: 3,
-                    region: stream.region,
-                    type: stream.type,
-                    channel: stream.channel
-                })
+    async HandleCronJob() {        
+        const promises = CONFIGURATION.STREAM_LIST.map((stream) => {
+            return axios.post('http://localhost:3000/stream-quality-report/calculate_topiq', {
+                url: stream.url,
+                duration: 3,
+                region: stream.region,
+                type: stream.type,
+                channel: stream.channel
             })
-        }
+        })
+       
 
-        const result = await Promise.all(this.promises)
+        const result = await Promise.all(promises)
         const topiqList = this.topiqParser(result)
 
         this.recordTopiqList(topiqList)
