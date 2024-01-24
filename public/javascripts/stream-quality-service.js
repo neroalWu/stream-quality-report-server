@@ -39,6 +39,7 @@ class StreamQualityService {
             this.appendRegion(reports[i], config)
             this.appendStreamType(reports[i], config)
             this.appendChannel(reports[i], config)
+            this.appendTimestamp(reports[i])
         }
 
         return reports
@@ -60,6 +61,10 @@ class StreamQualityService {
         if ('channel' in config) {
             Object.assign(topiq, { channel: config.channel })
         }
+    }
+
+    appendTimestamp(topiq) {
+        Object.assign(topiq, { timestamp: Date.now()})
     }
 
     recordTopiqList(topiqList) {
