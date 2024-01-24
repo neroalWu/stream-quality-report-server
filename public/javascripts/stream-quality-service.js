@@ -12,7 +12,7 @@ class StreamQualityService {
         this.cronJob = cron.StartJob(this.HandleCronJob.bind(this))
     }
 
-    async HandleCronJob() {        
+    async HandleCronJob() {
         const promises = CONFIGURATION.STREAM_LIST.map((stream) => {
             return axios.post('http://localhost:3000/stream-quality-report/calculate_topiq', {
                 url: stream.url,
@@ -22,7 +22,6 @@ class StreamQualityService {
                 channel: stream.channel
             })
         })
-       
 
         const result = await Promise.all(promises)
         const topiqList = this.topiqParser(result)
@@ -33,13 +32,14 @@ class StreamQualityService {
     topiqParser(result) {
         const reports = result.map((x) => x.data)
         const configs = result.map((x) => JSON.parse(x.config.data))
+        const timestamp = Date.now()
 
         for (let i = 0; i < reports.length; i++) {
             const config = configs[i]
             this.appendRegion(reports[i], config)
             this.appendStreamType(reports[i], config)
             this.appendChannel(reports[i], config)
-            this.appendTimestamp(reports[i])
+            this.appendTimestamp(reports[i], timestamp)
         }
 
         return reports
@@ -63,8 +63,8 @@ class StreamQualityService {
         }
     }
 
-    appendTimestamp(topiq) {
-        Object.assign(topiq, { timestamp: Date.now()})
+    appendTimestamp(topiq, timestamp) {
+        Object.assign(topiq, { timestamp: timestamp })
     }
 
     recordTopiqList(topiqList) {
