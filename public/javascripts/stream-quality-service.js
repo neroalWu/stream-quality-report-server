@@ -1,6 +1,7 @@
 const cron = require('./cron-job')
 const axios = require('axios').default
 const CONFIGURATION = require('./configuration')
+const mongoDBInstance = require('./mongodb')
 
 class StreamQualityService {
     constructor() {
@@ -12,6 +13,7 @@ class StreamQualityService {
         this.cronJob = cron.StartJob(this.HandleCronJob.bind(this))
     }
 
+    // TODO: 增加時間間隔
     async HandleCronJob() {
         const promises = CONFIGURATION.STREAM_LIST.map((stream) => {
             return axios.post(stream.server, {
@@ -68,9 +70,7 @@ class StreamQualityService {
     }
 
     recordTopiqList(topiqList) {
-        axios.post('http://localhost:3000/stream-quality-report/record-topiq-list', {
-            topiqList: topiqList
-        })
+        mongoDBInstance.RecordTopiqList(topiqList)
     }
 
     Close() {
