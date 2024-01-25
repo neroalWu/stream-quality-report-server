@@ -1,5 +1,6 @@
 const { MongoClient } = require('mongodb')
-const CONFIGURATION = require('../javascripts/configuration')
+const CONFIGURATION = require('./configuration')
+
 class MongoDB {
     constructor() {
         this.db = null

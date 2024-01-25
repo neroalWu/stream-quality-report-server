@@ -7,16 +7,15 @@
 var app = require('../app')
 var debug = require('debug')('stream-quality-report-server:server')
 var http = require('http')
-var CONFIGURATION = require('../public/javascripts/configuration')
-var mongoDBInstance = require('../public/javascripts/mongodb')
-var streamQualityServiceInstance = require('../public/javascripts/stream-quality-service')
+var CONFIGURATION = require('../src/configuration')
+var mongoDBInstance = require('../src/mongodb')
+var streamQualityServiceInstance = require('../src/stream-quality-service')
 
 /**
  * Initialize Instance
  */
 mongoDBInstance.Connect(CONFIGURATION.MONGODB_CONFIG.URI, CONFIGURATION.MONGODB_CONFIG.COLLECTION)
 streamQualityServiceInstance.Init()
-
 /**
  * Get port from environment and store in Express.
  */

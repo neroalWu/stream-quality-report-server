@@ -1,7 +1,7 @@
 var express = require('express')
 var router = express.Router()
-var ERRORCODE = require('../public/javascripts/errorcode').STREAM_QUALITY_REPORT
-var mongoDBInstance = require('../public/javascripts/mongodb')
+var ERRORCODE = require('../src/errorcode').STREAM_QUALITY_REPORT
+var mongoDBInstance = require('../src/mongodb')
 
 function handleSuccess(res, data) {
     res.send({

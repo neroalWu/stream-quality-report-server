@@ -6,6 +6,8 @@ const mongoDBInstance = require('./mongodb')
 class StreamQualityService {
     constructor() {
         this.cronJob = null
+        this.delay = 1000
+        this.timestamp = 0
     }
 
     Init() {
@@ -13,35 +15,49 @@ class StreamQualityService {
         this.cronJob = cron.StartJob(this.HandleCronJob.bind(this))
     }
 
-    // TODO: 增加時間間隔
     async HandleCronJob() {
-        const promises = CONFIGURATION.STREAM_LIST.map((stream) => {
-            return axios.post(stream.server, {
-                url: stream.url,
+        this.timestamp = Date.now()
+
+        const queue = CONFIGURATION.STREAM_LIST.reduce(async (acc, stream) => {
+            await acc
+            await this.processStream(stream)
+            await new Promise((resolve) => setTimeout(resolve, this.delay))
+        }, Promise.resolve())
+
+        await queue
+
+        console.log('All streams have benn processed')
+    }
+
+    async processStream(streamConfig) {
+        console.log(`Process stream:: ${streamConfig.channel}`)
+
+        try {
+            const response = await axios.post(streamConfig.server, {
+                url: streamConfig.url,
                 duration: 3,
-                region: stream.region,
-                type: stream.type,
-                channel: stream.channel
+                region: streamConfig.region,
+                type: streamConfig.type,
+                channel: streamConfig.channel
             })
-        })
 
-        const result = await Promise.all(promises)
-        const topiqList = this.topiqParser(result)
-
-        this.recordTopiqList(topiqList)
+            const topiqList = this.topiqParser([response])
+            this.recordTopiqList(topiqList)
+        } catch (error) {
+            console.error(`Error for ${streamConfig.server}: ${error}`)
+        }
     }
 
     topiqParser(result) {
         const reports = result.map((x) => x.data)
         const configs = result.map((x) => JSON.parse(x.config.data))
-        const timestamp = Date.now()
 
         for (let i = 0; i < reports.length; i++) {
             const config = configs[i]
             this.appendRegion(reports[i], config)
             this.appendStreamType(reports[i], config)
             this.appendChannel(reports[i], config)
-            this.appendTimestamp(reports[i], timestamp)
+            this.appendTimestamp(reports[i], this.timestamp)
         }
 
         return reports
