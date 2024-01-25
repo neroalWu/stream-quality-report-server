@@ -42,6 +42,34 @@ CONFIGURATION.STREAM_LIST = [
         type: 'RTMP',
         channel: 'BTCB04m',
         url: 'rtmp://10.22.1.201/cb/BTCB04m'
+    },
+    {
+        region: 'CEBU',
+        server: 'http://localhost:3000/stream-quality-report/calculate_topiq',
+        type: 'RTMP',
+        channel: 'BTCB05',
+        url: 'rtmp://10.22.1.201/cb/BTCB05'
+    },
+    {
+        region: 'CEBU',
+        server: 'http://localhost:3000/stream-quality-report/calculate_topiq',
+        type: 'RTMP',
+        channel: 'BTCB05m',
+        url: 'rtmp://10.22.1.201/cb/BTCB05m'
+    },
+    {
+        region: 'CEBU',
+        server: 'http://localhost:3000/stream-quality-report/calculate_topiq',
+        type: 'RTMP',
+        channel: 'BTCB06',
+        url: 'rtmp://10.22.1.201/cb/BTCB06'
+    },
+    {
+        region: 'CEBU',
+        server: 'http://localhost:3000/stream-quality-report/calculate_topiq',
+        type: 'RTMP',
+        channel: 'BTCB06m',
+        url: 'rtmp://10.22.1.201/cb/BTCB06m'
     }
 ]
 
