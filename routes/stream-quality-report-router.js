@@ -27,7 +27,7 @@ function handleError(res, error) {
 router.get('/get-all', async (req, res) => {
     try {
         const result = await mongoDBInstance.GetAll()
-        console.log(result)
+        
         handleSuccess(res, result)
     } catch (error) {
         handleError(res, error)

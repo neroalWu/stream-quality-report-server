@@ -69,7 +69,8 @@ class MongoDB {
                 type: { $eq: type },
                 channel: { $eq: channel }
             })
-            .limit(50)
+            .sort({ _id: -1})
+            .limit(10)
             .toArray()
 
         const nrList = result.map((topiq) => topiq['topiq_nr'])
@@ -83,7 +84,8 @@ class MongoDB {
                 type: { $eq: type },
                 channel: { $eq: channel }
             })
-            .limit(50)
+            .sort({ _id: -1})
+            .limit(10)
             .toArray()
 
         const nrFlaveList = result.map((topiq) => topiq['topiq_nr-flive'])
@@ -97,7 +99,8 @@ class MongoDB {
                 type: { $eq: type },
                 channel: { $eq: channel }
             })
-            .limit(50)
+            .sort({ _id: -1})
+            .limit(10)
             .toArray()
 
         const nrSpaqList = result.map((topiq) => topiq['topiq_nr-spaq'])
@@ -111,7 +114,8 @@ class MongoDB {
                 type: { $eq: type },
                 channel: { $eq: channel }
             })
-            .limit(50)
+            .sort({ _id: -1})
+            .limit(10)
             .toArray()
 
         const timestampList = result.map((topiq) => topiq['timestamp'])
