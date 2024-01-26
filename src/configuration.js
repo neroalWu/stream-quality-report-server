@@ -1,6 +1,6 @@
 const CONFIGURATION = {}
 
-const RTMP_SERVER_URL = 'http://localhost:3000/stream-quality-report/calculate_topiq'
+const RTMP_SERVER_URL = 'http://10.20.30.130:8000/rtmp/calculate_topiq'
 CONFIGURATION.STREAM_LIST = [
     {
         region: 'CEBU',

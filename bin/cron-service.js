@@ -5,7 +5,7 @@ const mongoDBInstance = require('../src/mongodb')
 class StreamQualityService {
     constructor() {
         this.cronJob = null
-        this.delay = 1000
+        this.delay = 30000
         this.timestamp = 0
     }
 

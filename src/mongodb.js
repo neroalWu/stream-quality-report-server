@@ -5,6 +5,7 @@ class MongoDB {
     constructor() {
         this.db = null
         this.collection = null
+        this.limitCount = 20;
     }
 
     async Connect(uri, collection) {
@@ -70,7 +71,7 @@ class MongoDB {
                 channel: { $eq: channel }
             })
             .sort({ _id: -1})
-            .limit(10)
+            .limit(this.limitCount)
             .toArray()
 
         const nrList = result.map((topiq) => topiq['topiq_nr'])
@@ -85,7 +86,7 @@ class MongoDB {
                 channel: { $eq: channel }
             })
             .sort({ _id: -1})
-            .limit(10)
+            .limit(this.limitCount)
             .toArray()
 
         const nrFlaveList = result.map((topiq) => topiq['topiq_nr-flive'])
@@ -100,7 +101,7 @@ class MongoDB {
                 channel: { $eq: channel }
             })
             .sort({ _id: -1})
-            .limit(10)
+            .limit(this.limitCount)
             .toArray()
 
         const nrSpaqList = result.map((topiq) => topiq['topiq_nr-spaq'])
@@ -115,7 +116,7 @@ class MongoDB {
                 channel: { $eq: channel }
             })
             .sort({ _id: -1})
-            .limit(10)
+            .limit(this.limitCount)
             .toArray()
 
         const timestampList = result.map((topiq) => topiq['timestamp'])
