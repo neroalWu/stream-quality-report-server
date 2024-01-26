@@ -3,6 +3,6 @@ POST {{host}}/calculate_topiq
 Content-Type: application/json
 
 {
-    "url": "rtmp://10.22.1.201/cb/BTCB02",
+    "url": "rtmp://10.22.1.201/cb/BTCB06",
     "duration": 3
 }

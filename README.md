@@ -40,7 +40,7 @@ struct Topia {
 - topiq_nr: 待補充。
 - topiq_nr-flive: 待補充。
 - topiq_nr-spqa: 待補充。
-- timestamp: 時間戳
+- timestamp: number
 
 ---
 <b>TopiqResponse</b>
