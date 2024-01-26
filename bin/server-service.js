@@ -9,13 +9,11 @@ var debug = require('debug')('stream-quality-report-server:server')
 var http = require('http')
 var CONFIGURATION = require('../src/configuration')
 var mongoDBInstance = require('../src/mongodb')
-var streamQualityServiceInstance = require('../src/stream-quality-service')
 
 /**
  * Initialize Instance
  */
 mongoDBInstance.Connect(CONFIGURATION.MONGODB_CONFIG.URI, CONFIGURATION.MONGODB_CONFIG.COLLECTION)
-streamQualityServiceInstance.Init()
 /**
  * Get port from environment and store in Express.
  */
@@ -36,7 +34,6 @@ var server = http.createServer(app)
 server.listen(port)
 server.on('error', onError)
 server.on('listening', onListening)
-server.on('close', onClose)
 
 /**
  * Normalize a port into a number, string, or false.
@@ -92,8 +89,4 @@ function onListening() {
     var addr = server.address()
     var bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port
     debug('Listening on ' + bind)
-}
-
-function onClose() {
-    streamQualityServiceInstance.Close();
 }

@@ -1,8 +1,7 @@
-const cron = require('./cron-job')
+const cron = require('../src/cron-job')
 const axios = require('axios').default
-const CONFIGURATION = require('./configuration')
-const mongoDBInstance = require('./mongodb')
-
+const CONFIGURATION = require('../src/configuration')
+const mongoDBInstance = require('../src/mongodb')
 class StreamQualityService {
     constructor() {
         this.cronJob = null
@@ -94,5 +93,14 @@ class StreamQualityService {
     }
 }
 
-const streamQualityServiceInstance = new StreamQualityService()
-module.exports = streamQualityServiceInstance
+async function main() {
+    await mongoDBInstance.Connect(
+        CONFIGURATION.MONGODB_CONFIG.URI,
+        CONFIGURATION.MONGODB_CONFIG.COLLECTION
+    )
+
+    const streamQualityServiceInstance = new StreamQualityService()
+    streamQualityServiceInstance.Init()
+}
+
+main()

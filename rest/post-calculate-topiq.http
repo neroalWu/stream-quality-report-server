@@ -1,4 +1,4 @@
-@host = http://localhost:3000/stream-quality-report
+@host = http://10.20.30.130:8000/rtmp
 POST {{host}}/calculate_topiq
 Content-Type: application/json
 
