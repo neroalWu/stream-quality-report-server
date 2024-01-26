@@ -23,8 +23,9 @@ class MongoDB {
 
     async GetAll() {
         const topiqResponse = await this.create_topiq_response(CONFIGURATION.STREAM_LIST)
+        const validResponse = topiqResponse.filter(x => x.timestamp_list.length > 0)
 
-        return topiqResponse
+        return validResponse
     }
 
     async GetByRegion(queryRegion) {
@@ -32,15 +33,17 @@ class MongoDB {
             (stream) => stream.region == queryRegion
         )
         const topiqResponse = await this.create_topiq_response(filterStreams)
+        const validResponse = topiqResponse.filter(x => x.timestamp_list.length > 0) 
 
-        return topiqResponse
+        return validResponse
     }
 
     async GetByStreamType(queryType) {
         const filterStreams = CONFIGURATION.STREAM_LIST.filter((stream) => stream.type == queryType)
         const topiqResponse = await this.create_topiq_response(filterStreams)
+        const validResponse = topiqResponse.filter(x => x.timestamp_list.length > 0)
 
-        return topiqResponse
+        return validResponse
     }
 
     async GetByRegionAndStreamType(queryRegion, queryType) {
@@ -48,15 +51,17 @@ class MongoDB {
             (stream) => stream.region == queryRegion && stream.type == queryType
         )
         const topiqResponse = await this.create_topiq_response(filterStreams)
+        const validResponse = topiqResponse.filter(x => x.timestamp_list.length > 0)
 
-        return topiqResponse
+        return validResponse
     }
 
     async GetByChannel(queryChannel) {
         const filterStreams = CONFIGURATION.STREAM_LIST.filter(stream => stream.channel == queryChannel)
         const topiqResponse = await this.create_topiq_response(filterStreams)
+        const validResponse = topiqResponse.filter(x => x.timestamp_list.length > 0)
 
-        return topiqResponse
+        return validResponse
     }
 
     async RecordTopiqList(topiqList) {
