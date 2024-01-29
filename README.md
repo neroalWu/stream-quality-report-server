@@ -16,6 +16,12 @@
 - get-by-channel
   - query: channel
   - return: StreamQualityReportResponse
+- get-stream-quality-report-response
+  - query
+    - region: string
+    - streamType: string
+    - bitrateType: string
+  - return : StreamQualityReportResponse
 
 
 ### structure
@@ -28,15 +34,17 @@ struct Topia {
     region: string,
     type: string,
     channel: string,
+    bitrateType: string,
     topiq_nr: number,
     topiq_nr-flive: number,
     topiq_nr-spaq: number
-    timestamp: 時間戳
+    timestamp: number
 }
 ```
 - region: 地區，例如: CEBU。
 - type: 協定類型，例如: RTMP。
 - channel: 桌號，例如: BTCB02。
+- bitrateType: 畫質，例如: High。
 - topiq_nr: 待補充。
 - topiq_nr-flive: 待補充。
 - topiq_nr-spqa: 待補充。
@@ -49,10 +57,10 @@ struct TopiqResponse {
     region: string;
     type: string;
     channel: string;
-    nr_list: number[]; //limit 50
-    nr_flive_list: number[]; //limit 50
-    nr_spaq_list: number[]; //limit 50
-    timestamp_list: number[] //limit 50
+    nr_list: number[]; //limit 20
+    nr_flive_list: number[]; //limit 20
+    nr_spaq_list: number[]; //limit 20
+    timestamp_list: number[] //limit 20
 }
 ```
 
