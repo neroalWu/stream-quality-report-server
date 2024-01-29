@@ -5,7 +5,7 @@ class MongoDB {
     constructor() {
         this.db = null
         this.collection = null
-        this.limitCount = 20;
+        this.limitCount = 20
     }
 
     async Connect(uri, collection) {
@@ -21,45 +21,19 @@ class MongoDB {
         }
     }
 
-    async GetAll() {
-        const topiqResponse = await this.create_topiq_response(CONFIGURATION.STREAM_LIST)
-        const validResponse = topiqResponse.filter(x => x.timestamp_list.length > 0)
+    async GetTopiqList(queryRegion = '', queryStreamType = '', queryBitrateType = '') {
+        const filterStreams = CONFIGURATION.STREAM_LIST.filter((stream) => {
+            const regionMatch = queryRegion != '' ? stream.region == queryRegion : true
+            const streamTypeMatch =
+                queryStreamType != '' ? stream.streamType == queryStreamType : true
+            const bitrateTypeMatch =
+                queryBitrateType != '' ? stream.bitrateType == queryBitrateType : true
 
-        return validResponse
-    }
+            return regionMatch && streamTypeMatch && bitrateTypeMatch
+        })
 
-    async GetByRegion(queryRegion) {
-        const filterStreams = CONFIGURATION.STREAM_LIST.filter(
-            (stream) => stream.region == queryRegion
-        )
         const topiqResponse = await this.create_topiq_response(filterStreams)
-        const validResponse = topiqResponse.filter(x => x.timestamp_list.length > 0) 
-
-        return validResponse
-    }
-
-    async GetByStreamType(queryType) {
-        const filterStreams = CONFIGURATION.STREAM_LIST.filter((stream) => stream.type == queryType)
-        const topiqResponse = await this.create_topiq_response(filterStreams)
-        const validResponse = topiqResponse.filter(x => x.timestamp_list.length > 0)
-
-        return validResponse
-    }
-
-    async GetByRegionAndStreamType(queryRegion, queryType) {
-        const filterStreams = CONFIGURATION.STREAM_LIST.filter(
-            (stream) => stream.region == queryRegion && stream.type == queryType
-        )
-        const topiqResponse = await this.create_topiq_response(filterStreams)
-        const validResponse = topiqResponse.filter(x => x.timestamp_list.length > 0)
-
-        return validResponse
-    }
-
-    async GetByChannel(queryChannel) {
-        const filterStreams = CONFIGURATION.STREAM_LIST.filter(stream => stream.channel == queryChannel)
-        const topiqResponse = await this.create_topiq_response(filterStreams)
-        const validResponse = topiqResponse.filter(x => x.timestamp_list.length > 0)
+        const validResponse = topiqResponse.filter((x) => x.timestamp_list.length > 0)
 
         return validResponse
     }
@@ -68,64 +42,24 @@ class MongoDB {
         await this.collection.insertMany(topiqList)
     }
 
-    async get_nr_list(region, type, channel) {
-        const result = await this.collection
-            .find({
-                region: { $eq: region },
-                type: { $eq: type },
-                channel: { $eq: channel }
-            })
-            .sort({ _id: -1})
-            .limit(this.limitCount)
-            .toArray()
-
-        const nrList = result.map((topiq) => topiq['topiq_nr'])
-        return nrList
-    }
-
-    async get_nr_flive_list(region, type, channel) {
-        const result = await this.collection
-            .find({
-                region: { $eq: region },
-                type: { $eq: type },
-                channel: { $eq: channel }
-            })
-            .sort({ _id: -1})
-            .limit(this.limitCount)
-            .toArray()
-
-        const nrFlaveList = result.map((topiq) => topiq['topiq_nr-flive'])
-        return nrFlaveList
-    }
-
-    async get_nr_spaq_list(region, type, channel) {
-        const result = await this.collection
-            .find({
-                region: { $eq: region },
-                type: { $eq: type },
-                channel: { $eq: channel }
-            })
-            .sort({ _id: -1})
-            .limit(this.limitCount)
-            .toArray()
-
-        const nrSpaqList = result.map((topiq) => topiq['topiq_nr-spaq'])
-        return nrSpaqList
-    }
-
-    async get_timestamp_list(region, type, channel) {
-        const result = await this.collection
-            .find({
-                region: { $eq: region },
-                type: { $eq: type },
-                channel: { $eq: channel }
-            })
-            .sort({ _id: -1})
-            .limit(this.limitCount)
-            .toArray()
-
-        const timestampList = result.map((topiq) => topiq['timestamp'])
-        return timestampList
+    async get_field_list(stream, fieldName) {
+        try {
+            const result = await this.collection
+                .find({
+                    region: { $eq: stream.region },
+                    streamType: { $eq: stream.streamType },
+                    bitrateType: { $eq: stream.bitrateType },
+                    channel: { $eq: stream.channel }
+                })
+                .sort({ _id: -1 })
+                .limit(this.limitCount)
+                .toArray()
+            const nrList = result.map((topiq) => topiq[fieldName])
+            return nrList
+        } catch (error) {
+            console.log(error)
+            throw error
+        }
     }
 
     async create_topiq_response(filter_list) {
@@ -133,26 +67,14 @@ class MongoDB {
             filter_list.map(async (stream) => {
                 return {
                     region: stream.region,
-                    type: stream.type,
+                    streamType: stream.streamType,
+                    bitrateType: stream.bitrateType,
                     channel: stream.channel,
 
-                    nr_list: await this.get_nr_list(stream.region, stream.type, stream.channel),
-                    nr_flive_list: await this.get_nr_flive_list(
-                        stream.region,
-                        stream.type,
-                        stream.channel
-                    ),
-                    nr_spaq_list: await this.get_nr_spaq_list(
-                        stream.region,
-                        stream.type,
-                        stream.channel
-                    ),
-
-                    timestamp_list: await this.get_timestamp_list(
-                        stream.region,
-                        stream.type,
-                        stream.channel
-                    )
+                    nr_list: await this.get_field_list(stream, 'topiq_nr'),
+                    nr_flive_list: await this.get_field_list(stream, 'topiq_nr-flive'),
+                    nr_spaq_list: await this.get_field_list(stream, 'topiq_nr-spaq'),
+                    timestamp_list: await this.get_field_list(stream, 'timestamp')
                 }
             })
         )

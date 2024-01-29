@@ -33,10 +33,11 @@ class StreamQualityService {
 
         try {
             const response = await axios.post(streamConfig.server, {
-                url: streamConfig.url,
+                url: streamConfig.source,
                 duration: 3,
                 region: streamConfig.region,
-                type: streamConfig.type,
+                streamType: streamConfig.streamType,
+                bitrateType: streamConfig.bitrateType,
                 channel: streamConfig.channel
             })
 
@@ -55,6 +56,7 @@ class StreamQualityService {
             const config = configs[i]
             this.appendRegion(reports[i], config)
             this.appendStreamType(reports[i], config)
+            this.appendBitrateType(reports[i], config)
             this.appendChannel(reports[i], config)
             this.appendTimestamp(reports[i], this.timestamp)
         }
@@ -69,8 +71,14 @@ class StreamQualityService {
     }
 
     appendStreamType(topiq, config) {
-        if ('type' in config) {
-            Object.assign(topiq, { type: config.type })
+        if ('streamType' in config) {
+            Object.assign(topiq, { streamType: config.streamType })
+        }
+    }
+
+    appendBitrateType(topiq, config) {
+        if ('bitrateType' in config) {
+            Object.assign(topiq, { bitrateType: config.bitrateType })
         }
     }
 

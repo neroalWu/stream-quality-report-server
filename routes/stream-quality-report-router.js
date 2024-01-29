@@ -24,94 +24,14 @@ function handleError(res, error) {
     })
 }
 
-router.get('/get-all', async (req, res) => {
+router.get('/get-stream-quality-report-response', async (req, res) => {
     try {
-        const result = await mongoDBInstance.GetAll()
-        
-        handleSuccess(res, result)
-    } catch (error) {
-        handleError(res, error)
-    }
-})
+        const queryRegion = req.query.region ? req.query.region : ''
+        const queryStreamType = req.query.streamType ? req.query.streamType : ''
+        const queryBitrateType = req.query.bitrateType ? req.query.bitrateType : ''
 
-router.get('/get-by-region', async (req, res) => {
-    try {
-        const queryRegion = req.query.region
-
-        if (!queryRegion) {
-            handleQueryError(res, ERRORCODE.MISSING_REGION, 'query string missing region')
-            return
-        }
-
-        const result = await mongoDBInstance.GetByRegion(queryRegion)
-
-        handleSuccess(res, result)
-    } catch (error) {
-        handleError(res, error)
-    }
-})
-
-router.get('/get-by-stream-type', async (req, res) => {
-    try {
-        const queryStreamType = req.query.type
-
-        if (!queryStreamType) {
-            handleQueryError(res, ERRORCODE.MISSING_STREAM_TYPE, 'query string missing type')
-            return
-        }
-
-        const result = await mongoDBInstance.GetByStreamType(queryStreamType)
-
-        handleSuccess(res, result)
-    } catch (error) {
-        handleError(res, error)
-    }
-})
-
-router.get('/get-by-region-and-stream-type', async (req, res) => {
-    try {
-        const queryRegion = req.query.region
-        const queryStringType = req.query.type
-
-        if (!queryRegion && !queryStringType) {
-            handleQueryError(
-                res,
-                ERRORCODE.MISSING_REGION_AND_STREAM_TYPE,
-                'query string missing region and type'
-            )
-            return
-        }
-
-        if (!queryRegion) {
-            handleQueryError(res, ERRORCODE.MISSING_REGION, 'query string missing region')
-            return
-        }
-
-        if (!queryStringType) {
-            handleQueryError(res, ERRORCODE.MISSING_STREAM_TYPE, 'query string missing type')
-            return
-        }
-
-        const result = await mongoDBInstance.GetByRegionAndStreamType(queryRegion, queryStringType)
-
-        handleSuccess(res, result)
-    } catch (error) {
-        handleError(res, error)
-    }
-})
-
-router.get('/get-by-channel', async (req, res) => {
-    try {
-        const queryChannel = req.query.channel
-
-        if (!queryChannel) {
-            handleQueryError(res, ERRORCODE.MISSING_CHANNEL, 'query string missing channel')
-            return
-        }
-
-        const result = await mongoDBInstance.GetByChannel(queryChannel)
-
-        handleSuccess(res, result)
+        const topiqList = await mongoDBInstance.GetTopiqList(queryRegion, queryStreamType, queryBitrateType)
+        handleSuccess(res, topiqList)
     } catch (error) {
         handleError(res, error)
     }

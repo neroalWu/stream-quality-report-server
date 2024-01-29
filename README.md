@@ -1,21 +1,6 @@
 # API
 
 ## stream-quality-report
-- get-all
-  - query: null
-  - return: StreamQualityReportResponse
-- get-by-region
-  - query: region
-  - return: StreamQualityReportResponse
-- get-by-stream-type
-  - query: type
-  - return: StreamQualityReportResponse
-- get-by-region-and-stream-type
-  - query: region, type
-  - return: StreamQualityReportResponse
-- get-by-channel
-  - query: channel
-  - return: StreamQualityReportResponse
 - get-stream-quality-report-response
   - query
     - region: string
@@ -55,8 +40,9 @@ struct Topia {
 ```
 struct TopiqResponse {
     region: string;
-    type: string;
+    streamType: string;
     channel: string;
+    bitrateType: string;
     nr_list: number[]; //limit 20
     nr_flive_list: number[]; //limit 20
     nr_spaq_list: number[]; //limit 20
@@ -76,9 +62,6 @@ struct StreamQualityReportResponse {
 
 - errorCode
   - 0: success
-  - 1: missing query region
-  - 2: missing query stream type
-  - 3: missing query region and stream type
-  - 4: missing query channel
+  - 1: missing query string
 - list: 篩選資料
 

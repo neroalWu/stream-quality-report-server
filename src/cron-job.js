@@ -1,8 +1,10 @@
+const CONFIGURATION = require('./configuration');
+
 const CronJob = require('cron').CronJob;
 
 function StartJob(callback) {
     console.log('StartJob')
-    return new CronJob('*/10 11-18 * * 1-5', () => callback(), null, true, 'Asia/Taipei');
+    return new CronJob(CONFIGURATION.CRON_TIME, () => callback(), null, true, 'Asia/Taipei');
 }
 
 function StopJob(job) {
