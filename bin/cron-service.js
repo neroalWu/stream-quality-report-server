@@ -1,7 +1,9 @@
 const cron = require('../src/cron-job')
 const axios = require('axios').default
+const ffmpeg = require('fluent-ffmpeg')
 const CONFIGURATION = require('../src/configuration')
 const mongoDBInstance = require('../src/mongodb')
+const ImageModel = require('../src/image-model')
 class StreamQualityService {
     constructor() {
         this.cronJob = null
@@ -19,6 +21,7 @@ class StreamQualityService {
 
         const queue = CONFIGURATION.STREAM_LIST.reduce(async (acc, stream) => {
             await acc
+            await this.captureScreenshot(stream)
             await this.processStream(stream)
             await new Promise((resolve) => setTimeout(resolve, this.delay))
         }, Promise.resolve())
@@ -94,6 +97,35 @@ class StreamQualityService {
 
     recordTopiqList(topiqList) {
         mongoDBInstance.RecordTopiqList(topiqList)
+    }
+
+    async captureScreenshot(stream) {
+        console.log('captureScreenshot:', stream.channel)
+        return new Promise((resolve, reject) => {
+            // do screen shot
+            const screenShotStream = ffmpeg(`${stream.source}${stream.channel}`)
+                .frames(1)
+                .toFormat('image2')
+                .pipe()
+
+            const buffers = []
+            screenShotStream.on('data', (chunk) => {
+                buffers.push(chunk)
+            })
+            screenShotStream.on('end', async () => {
+                //save image to mongodb
+                const buffer = Buffer.concat(bfuffers)
+                const id = `${stream.regino}_${stream.streamType}_${stream.channel}_${stream.timestamp}`
+                const imageModel = new ImageModel({
+                    id: id,
+                    data: buffer,
+                    contentType: 'image/png'
+                })
+
+                resolve(imageModel.save())
+            })
+            screenShotStream.on('error', reject)
+        })
     }
 
     Close() {

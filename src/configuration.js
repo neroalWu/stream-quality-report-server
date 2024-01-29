@@ -30,7 +30,7 @@ const SOURCE_APPEND = {
     [REGION_TYPE.CEBU]: 'cb/'
 }
 
-CONFIGURATION.CRON_TIME = DEBUG ? '*/10 * * * * *' : '*/10 11-18 * * 1-5'
+CONFIGURATION.CRON_TIME = DEBUG ? '*/30 * * * * *' : '*/10 11-18 * * 1-5'
 
 CONFIGURATION.STREAM_LIST = [
     {

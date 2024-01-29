@@ -7,6 +7,13 @@
     - streamType: string
     - bitrateType: string
   - return : StreamQualityReportResponse
+- get-screenshot
+  - query
+    - region: string
+    - streamType: string
+    - channel: string
+    - timestamp: number
+    - return: Base64
 
 
 ### structure
@@ -64,4 +71,15 @@ struct StreamQualityReportResponse {
   - 0: success
   - 1: missing query string
 - list: 篩選資料
+
+---
+
+<b>ImageModel</b>
+```
+struct ImageModel {
+  id: string;
+  data: Buffer;
+}
+```
+
 
