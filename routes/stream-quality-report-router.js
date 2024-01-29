@@ -41,10 +41,14 @@ router.get('/get-screenshot', async (req, res) => {
         const queryTimestamp = timestamp ? timestamp : ''
         const id = `${queryRegion}_${queryStreamType}_${queryChannel}_${queryTimestamp}`
 
-        const data = await ImageModel.findOne({ id : id})
-        console.log(id, data)
+        const imageModel = await ImageModel.findOne({ id: id })
+        console.log(imageModel)
 
-        res.send(data)
+        let base64Image = ''
+
+        imageModel && (base64Image = `data:image/png;base64,${imageModel.data.toString('base64')}`)
+
+        res.send(base64Image)
     } catch (error) {
         console.log(error)
         handleError(res, error)
