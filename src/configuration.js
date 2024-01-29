@@ -1,77 +1,112 @@
 const CONFIGURATION = {}
 
-const RTMP_SERVER_URL = 'http://10.20.30.130:8000/rtmp/calculate_topiq'
+const REGION_TYPE = {
+    CEBU: 'CEBU'
+}
+
+const STREAM_TYPE = {
+    RTMP: 'RTMP',
+    FLV: 'FLV'
+}
+
+const BITRATE_TYPE = {
+    HIGH: 'HIGH',
+    LOW: 'LOW'
+}
+
+const SERVER_URL = {
+    [STREAM_TYPE.RTMP]: 'http://10.20.30.130:8000/rtmp/calculate_topiq'
+}
+
+const SOURCE_URL = {
+    [STREAM_TYPE.RTMP]: 'rtmp://10.22.1.201/'
+}
+
+const SOURCE_APPEND = {
+    [REGION_TYPE.CEBU]: 'cb/'
+}
+
 CONFIGURATION.STREAM_LIST = [
     {
-        region: 'CEBU',
-        server: RTMP_SERVER_URL,
-        type: 'RTMP',
+        region: REGION_TYPE.CEBU,
+        server: SERVER_URL[STREAM_TYPE.RTMP],
+        type: STREAM_TYPE.RTMP,
+        bitrateType: BITRATE_TYPE.LOW,
         channel: 'BTCB02',
-        url: 'rtmp://10.22.1.201/cb/BTCB02'
+        source: `${SOURCE_URL[STREAM_TYPE.RTMP]}${SOURCE_APPEND[REGION_TYPE.CEBU]}`
     },
     {
-        region: 'CEBU',
-        server: RTMP_SERVER_URL,
-        type: 'RTMP',
+        region: REGION_TYPE.CEBU,
+        server: SERVER_URL[STREAM_TYPE.RTMP],
+        type: STREAM_TYPE.RTMP,
+        bitrateType: BITRATE_TYPE.HIGH,
         channel: 'BTCB02m',
-        url: 'rtmp://10.22.1.201/cb/BTCB02m'
+        source: `${SOURCE_URL[STREAM_TYPE.RTMP]}${SOURCE_APPEND[REGION_TYPE.CEBU]}`
     },
     {
-        region: 'CEBU',
-        server: RTMP_SERVER_URL,
-        type: 'RTMP',
+        region: REGION_TYPE.CEBU,
+        server: SERVER_URL[STREAM_TYPE.RTMP],
+        type: STREAM_TYPE.RTMP,
+        bitrateType: BITRATE_TYPE.LOW,
         channel: 'BTCB03',
-        url: 'rtmp://10.22.1.201/cb/BTCB03'
+        source: `${SOURCE_URL[STREAM_TYPE.RTMP]}${SOURCE_APPEND[REGION_TYPE.CEBU]}`
     },
     {
-        region: 'CEBU',
-        server: RTMP_SERVER_URL,
-        type: 'RTMP',
+        region: REGION_TYPE.CEBU,
+        server: SERVER_URL[STREAM_TYPE.RTMP],
+        type: STREAM_TYPE.RTMP,
+        bitrateType: BITRATE_TYPE.HIGH,
         channel: 'BTCB03m',
-        url: 'rtmp://10.22.1.201/cb/BTCB03m'
+        source: `${SOURCE_URL[STREAM_TYPE.RTMP]}${SOURCE_APPEND[REGION_TYPE.CEBU]}`
     },
     {
-        region: 'CEBU',
-        server: RTMP_SERVER_URL,
-        type: 'RTMP',
+        region: REGION_TYPE.CEBU,
+        server: SERVER_URL[STREAM_TYPE.RTMP],
+        type: STREAM_TYPE.RTMP,
+        bitrateType: BITRATE_TYPE.LOW,
         channel: 'BTCB04',
-        url: 'rtmp://10.22.1.201/cb/BTCB04'
+        source: `${SOURCE_URL[STREAM_TYPE.RTMP]}${SOURCE_APPEND[REGION_TYPE.CEBU]}`
     },
     {
-        region: 'CEBU',
-        server: RTMP_SERVER_URL,
-        type: 'RTMP',
+        region: REGION_TYPE.CEBU,
+        server: SERVER_URL[STREAM_TYPE.RTMP],
+        type: STREAM_TYPE.RTMP,
+        bitrateType: BITRATE_TYPE.HIGH,
         channel: 'BTCB04m',
-        url: 'rtmp://10.22.1.201/cb/BTCB04m'
+        source: `${SOURCE_URL[STREAM_TYPE.RTMP]}${SOURCE_APPEND[REGION_TYPE.CEBU]}`
     },
     {
-        region: 'CEBU',
-        server: RTMP_SERVER_URL,
-        type: 'RTMP',
+        region: REGION_TYPE.CEBU,
+        server: SERVER_URL[STREAM_TYPE.RTMP],
+        type: STREAM_TYPE.RTMP,
+        bitrateType: BITRATE_TYPE.LOW,
         channel: 'BTCB05',
-        url: 'rtmp://10.22.1.201/cb/BTCB05'
+        source: `${SOURCE_URL[STREAM_TYPE.RTMP]}${SOURCE_APPEND[REGION_TYPE.CEBU]}`
     },
     {
-        region: 'CEBU',
-        server: RTMP_SERVER_URL,
-        type: 'RTMP',
+        region: REGION_TYPE.CEBU,
+        server: SERVER_URL[STREAM_TYPE.RTMP],
+        type: STREAM_TYPE.RTMP,
+        bitrateType: BITRATE_TYPE.HIGH,
         channel: 'BTCB05m',
-        url: 'rtmp://10.22.1.201/cb/BTCB05m'
+        source: `${SOURCE_URL[STREAM_TYPE.RTMP]}${SOURCE_APPEND[REGION_TYPE.CEBU]}`
     },
     {
-        region: 'CEBU',
-        server: RTMP_SERVER_URL,
-        type: 'RTMP',
+        region: REGION_TYPE.CEBU,
+        server: SERVER_URL[STREAM_TYPE.RTMP],
+        type: STREAM_TYPE.RTMP,
+        bitrateType: BITRATE_TYPE.LOW,
         channel: 'BTCB06',
-        url: 'rtmp://10.22.1.201/cb/BTCB06'
+        source: `${SOURCE_URL[STREAM_TYPE.RTMP]}${SOURCE_APPEND[REGION_TYPE.CEBU]}`
     },
     {
-        region: 'CEBU',
-        server: RTMP_SERVER_URL,
-        type: 'RTMP',
+        region: REGION_TYPE.CEBU,
+        server: SERVER_URL[STREAM_TYPE.RTMP],
+        type: STREAM_TYPE.RTMP,
+        bitrateType: BITRATE_TYPE.HIGH,
         channel: 'BTCB06m',
-        url: 'rtmp://10.22.1.201/cb/BTCB06m'
-    }
+        source: `${SOURCE_URL[STREAM_TYPE.RTMP]}${SOURCE_APPEND[REGION_TYPE.CEBU]}`
+    },
 ]
 
 CONFIGURATION.MONGODB_CONFIG = {
