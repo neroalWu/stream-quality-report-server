@@ -13,7 +13,7 @@
     - streamType: string
     - channel: string
     - timestamp: number
-    - return: Base64
+    - return: ImageModel
 
 
 ### structure

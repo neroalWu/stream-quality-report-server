@@ -114,12 +114,11 @@ class StreamQualityService {
             })
             screenShotStream.on('end', async () => {
                 //save image to mongodb
-                const buffer = Buffer.concat(bfuffers)
-                const id = `${stream.regino}_${stream.streamType}_${stream.channel}_${stream.timestamp}`
+                const buffer = Buffer.concat(buffers)
+                const id = `${stream.region}_${stream.streamType}_${stream.channel}_${this.timestamp}`
                 const imageModel = new ImageModel({
                     id: id,
                     data: buffer,
-                    contentType: 'image/png'
                 })
 
                 resolve(imageModel.save())

@@ -39,22 +39,14 @@ router.get('/get-screenshot', async (req, res) => {
         const queryStreamType = streamType ? streamType : ''
         const queryChannel = channel ? channel : ''
         const queryTimestamp = timestamp ? timestamp : ''
+        const id = `${queryRegion}_${queryStreamType}_${queryChannel}_${queryTimestamp}`
 
-        ImageModel.find(
-            {
-                id: `${queryRegion}_${queryStreamType}_${queryChannel}_${queryTimestamp}`
-            },
-            (err, image = '') => {
-                if (err) {
-                    console.log('image not found')
-                    handleError(res, err)
-                    return
-                }
+        const data = await ImageModel.findOne({ id : id})
+        console.log(id, data)
 
-                res.send(image.toString('base64'))
-            }
-        )
+        res.send(data)
     } catch (error) {
+        console.log(error)
         handleError(res, error)
     }
 })
