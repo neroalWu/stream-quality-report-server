@@ -45,24 +45,8 @@ CONFIGURATION.STREAM_LIST = [
         region: REGION_TYPE.CEBU,
         server: SERVER_URL[STREAM_TYPE.RTMP],
         streamType: STREAM_TYPE.RTMP,
-        bitrateType: BITRATE_TYPE.HIGH,
-        channel: 'BTCB02m',
-        source: `${SOURCE_URL[STREAM_TYPE.RTMP]}${SOURCE_APPEND[REGION_TYPE.CEBU]}`
-    },
-    {
-        region: REGION_TYPE.CEBU,
-        server: SERVER_URL[STREAM_TYPE.RTMP],
-        streamType: STREAM_TYPE.RTMP,
         bitrateType: BITRATE_TYPE.LOW,
         channel: 'BTCB03',
-        source: `${SOURCE_URL[STREAM_TYPE.RTMP]}${SOURCE_APPEND[REGION_TYPE.CEBU]}`
-    },
-    {
-        region: REGION_TYPE.CEBU,
-        server: SERVER_URL[STREAM_TYPE.RTMP],
-        streamType: STREAM_TYPE.RTMP,
-        bitrateType: BITRATE_TYPE.HIGH,
-        channel: 'BTCB03m',
         source: `${SOURCE_URL[STREAM_TYPE.RTMP]}${SOURCE_APPEND[REGION_TYPE.CEBU]}`
     },
     {
@@ -77,14 +61,6 @@ CONFIGURATION.STREAM_LIST = [
         region: REGION_TYPE.CEBU,
         server: SERVER_URL[STREAM_TYPE.RTMP],
         streamType: STREAM_TYPE.RTMP,
-        bitrateType: BITRATE_TYPE.HIGH,
-        channel: 'BTCB04m',
-        source: `${SOURCE_URL[STREAM_TYPE.RTMP]}${SOURCE_APPEND[REGION_TYPE.CEBU]}`
-    },
-    {
-        region: REGION_TYPE.CEBU,
-        server: SERVER_URL[STREAM_TYPE.RTMP],
-        streamType: STREAM_TYPE.RTMP,
         bitrateType: BITRATE_TYPE.LOW,
         channel: 'BTCB05',
         source: `${SOURCE_URL[STREAM_TYPE.RTMP]}${SOURCE_APPEND[REGION_TYPE.CEBU]}`
@@ -93,16 +69,40 @@ CONFIGURATION.STREAM_LIST = [
         region: REGION_TYPE.CEBU,
         server: SERVER_URL[STREAM_TYPE.RTMP],
         streamType: STREAM_TYPE.RTMP,
-        bitrateType: BITRATE_TYPE.HIGH,
-        channel: 'BTCB05m',
+        bitrateType: BITRATE_TYPE.LOW,
+        channel: 'BTCB06',
         source: `${SOURCE_URL[STREAM_TYPE.RTMP]}${SOURCE_APPEND[REGION_TYPE.CEBU]}`
     },
     {
         region: REGION_TYPE.CEBU,
         server: SERVER_URL[STREAM_TYPE.RTMP],
         streamType: STREAM_TYPE.RTMP,
-        bitrateType: BITRATE_TYPE.LOW,
-        channel: 'BTCB06',
+        bitrateType: BITRATE_TYPE.HIGH,
+        channel: 'BTCB02m',
+        source: `${SOURCE_URL[STREAM_TYPE.RTMP]}${SOURCE_APPEND[REGION_TYPE.CEBU]}`
+    },
+    {
+        region: REGION_TYPE.CEBU,
+        server: SERVER_URL[STREAM_TYPE.RTMP],
+        streamType: STREAM_TYPE.RTMP,
+        bitrateType: BITRATE_TYPE.HIGH,
+        channel: 'BTCB03m',
+        source: `${SOURCE_URL[STREAM_TYPE.RTMP]}${SOURCE_APPEND[REGION_TYPE.CEBU]}`
+    },
+    {
+        region: REGION_TYPE.CEBU,
+        server: SERVER_URL[STREAM_TYPE.RTMP],
+        streamType: STREAM_TYPE.RTMP,
+        bitrateType: BITRATE_TYPE.HIGH,
+        channel: 'BTCB04m',
+        source: `${SOURCE_URL[STREAM_TYPE.RTMP]}${SOURCE_APPEND[REGION_TYPE.CEBU]}`
+    },
+    {
+        region: REGION_TYPE.CEBU,
+        server: SERVER_URL[STREAM_TYPE.RTMP],
+        streamType: STREAM_TYPE.RTMP,
+        bitrateType: BITRATE_TYPE.HIGH,
+        channel: 'BTCB05m',
         source: `${SOURCE_URL[STREAM_TYPE.RTMP]}${SOURCE_APPEND[REGION_TYPE.CEBU]}`
     },
     {
