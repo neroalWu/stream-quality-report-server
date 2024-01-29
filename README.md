@@ -24,7 +24,7 @@
 ```
 struct Topia {
     region: string,
-    type: string,
+    streamType: string,
     channel: string,
     bitrateType: string,
     topiq_nr: number,
@@ -34,7 +34,7 @@ struct Topia {
 }
 ```
 - region: 地區，例如: CEBU。
-- type: 協定類型，例如: RTMP。
+- streamType: 協定類型，例如: RTMP。
 - channel: 桌號，例如: BTCB02。
 - bitrateType: 畫質，例如: High。
 - topiq_nr: 待補充。
@@ -69,7 +69,6 @@ struct StreamQualityReportResponse {
 
 - errorCode
   - 0: success
-  - 1: missing query string
 - list: 篩選資料
 
 ---
@@ -78,7 +77,7 @@ struct StreamQualityReportResponse {
 ```
 struct ImageModel {
   id: string;
-  data: Buffer;
+  buffer: Buffer;
 }
 ```
 

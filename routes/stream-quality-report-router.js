@@ -2,7 +2,7 @@ var express = require('express')
 var router = express.Router()
 var ERRORCODE = require('../src/errorcode').STREAM_QUALITY_REPORT
 var mongoDBInstance = require('../src/mongodb')
-var ImageModel = require('../src/image-model')
+var ImageModel = require('../src/model/image-model')
 
 function handleError(res, error) {
     res.status(500).send({
@@ -42,11 +42,10 @@ router.get('/get-screenshot', async (req, res) => {
         const id = `${queryRegion}_${queryStreamType}_${queryChannel}_${queryTimestamp}`
 
         const imageModel = await ImageModel.findOne({ id: id })
-        console.log(imageModel)
 
         let base64Image = ''
 
-        imageModel && (base64Image = `data:image/png;base64,${imageModel.data.toString('base64')}`)
+        imageModel && (base64Image = `data:image/png;base64,${imageModel.buffer.toString('base64')}`)
 
         res.send(base64Image)
     } catch (error) {

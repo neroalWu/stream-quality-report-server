@@ -1,20 +1,18 @@
-const { MongoClient } = require('mongodb')
+const mongoose = require('mongoose')
 const CONFIGURATION = require('./configuration')
+
+const ImageModel = require('./model/image-model')
+const TopiqModel = require('./model/topiq-model')
 
 class MongoDB {
     constructor() {
-        this.db = null
-        this.collection = null
         this.limitCount = 20
     }
 
-    async Connect(uri, collection) {
+    async Connect(uri) {
         try {
-            const client = new MongoClient(uri)
-            await client.connect()
-            console.log('Connected to MongoDB')
-            this.db = client.db()
-            this.collection = this.db.collection(collection)
+            await mongoose.connect(uri)
+            console.log('MongoDB connect success.')
         } catch (error) {
             console.error('Error connecting to MongoDB:', error)
             throw error
@@ -38,24 +36,30 @@ class MongoDB {
         return validResponse
     }
 
-    async RecordTopiqList(topiqList) {
-        await this.collection.insertMany(topiqList)
+    async CreateTopiq(topiq) {
+        TopiqModel.create(topiq)
+    }
+
+    async CreateImage(id, buffer) {
+        ImageModel.create({
+            id: id,
+            buffer: buffer
+        })
     }
 
     async get_field_list(stream, fieldName) {
         try {
-            const result = await this.collection
-                .find({
-                    region: { $eq: stream.region },
-                    streamType: { $eq: stream.streamType },
-                    bitrateType: { $eq: stream.bitrateType },
-                    channel: { $eq: stream.channel }
-                })
+            const result = await TopiqModel.find({
+                region: { $eq: stream.region },
+                streamType: { $eq: stream.streamType },
+                bitrateType: { $eq: stream.bitrateType },
+                channel: { $eq: stream.channel }
+            })
                 .sort({ _id: -1 })
                 .limit(this.limitCount)
-                .toArray()
-            const nrList = result.map((topiq) => topiq[fieldName])
-            return nrList
+
+            const list = result.map((topiq) => topiq[fieldName])
+            return list
         } catch (error) {
             console.log(error)
             throw error

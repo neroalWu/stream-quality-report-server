@@ -13,7 +13,7 @@ var mongoDBInstance = require('../src/mongodb')
 /**
  * Initialize Instance
  */
-mongoDBInstance.Connect(CONFIGURATION.MONGODB_CONFIG.URI, CONFIGURATION.MONGODB_CONFIG.COLLECTION)
+mongoDBInstance.Connect(CONFIGURATION.MONGODB_CONFIG.URI)
 /**
  * Get port from environment and store in Express.
  */

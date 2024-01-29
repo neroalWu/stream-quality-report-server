@@ -117,7 +117,6 @@ CONFIGURATION.STREAM_LIST = [
 
 CONFIGURATION.MONGODB_CONFIG = {
     URI: 'mongodb://localhost:27017/stream-quality-report-db',
-    COLLECTION: 'topiq'
 }
 
 module.exports = CONFIGURATION
