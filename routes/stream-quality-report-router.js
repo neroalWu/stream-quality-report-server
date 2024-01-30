@@ -10,7 +10,7 @@ function handleError(res, error) {
     })
 }
 
-router.post('/get-topiq-response-list', async (req, res) => {
+router.post('/get-topiq-data', async (req, res) => {
     try {
         const isValid = Util.ValidPostBody(req.body, ['region', 'streamType', 'bitrateType'])
         if (!isValid) {
@@ -26,7 +26,7 @@ router.post('/get-topiq-response-list', async (req, res) => {
     }
 })
 
-router.post('/get-image-response', async (req, res) => {
+router.post('/get-image', async (req, res) => {
     try {
         const isValid = Util.ValidPostBody(req.body, ['region', 'streamType', 'channel', 'timestamp'])
         if (!isValid) {
@@ -38,7 +38,7 @@ router.post('/get-image-response', async (req, res) => {
         const id = `${region}_${streamType}_${channel}_${timestamp}`
         const base64Image = await mongoDBInstance.GetImageBase64(id)
 
-        res.send({ imageSrc: base64Image })
+        res.send({ src: base64Image })
     } catch (error) {
         console.log(error)
         handleError(res, error)

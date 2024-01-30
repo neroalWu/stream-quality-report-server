@@ -1,5 +1,5 @@
 @host =  http://localhost:3000/stream-quality-report
-POST {{host}}/get-topiq-response-list
+POST {{host}}/get-topiq-data
 Content-Type: application/json
 
 {

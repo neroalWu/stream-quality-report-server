@@ -1,5 +1,5 @@
 @host =  http://localhost:3000/stream-quality-report
-POST {{host}}/get-image-response
+POST {{host}}/get-image
 Content-Type: application/json
 
 {
