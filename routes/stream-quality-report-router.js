@@ -26,7 +26,7 @@ router.post('/get-topiq-response-list', async (req, res) => {
     }
 })
 
-router.post('/get-screenshot', async (req, res) => {
+router.post('/get-image-response', async (req, res) => {
     try {
         const isValid = Util.ValidPostBody(req.body, ['region', 'streamType', 'channel', 'timestamp'])
         if (!isValid) {
