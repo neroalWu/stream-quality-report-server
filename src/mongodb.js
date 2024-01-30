@@ -49,7 +49,7 @@ class MongoDB {
 
     async GetImageBase64(id) {
         const imageModel = await ImageModel.findOne({ id: id })
-        return imageModel ? imageModel.buffer.toString('base64') : ''
+        return imageModel ? `data:image/png;base64,${imageModel.buffer.toString('base64')}` : ''
     }
 
     async get_field_list(stream, fieldName) {
