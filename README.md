@@ -1,36 +1,30 @@
 # API
-
-## stream-quality-report
 - get-topiq-response-list
-  - body
-    - region: string
-    - streamType: string
-    - bitrateType: string
-  - return : TopiqResponseList
+  - method: POST
+  - params: TopiqRequest
+  - return: TopiqResponse
 - get-image-response
-  - body
-    - region: string
-    - streamType: string
-    - channel: string
-    - timestamp: number
+  - mtehod: POST
+  - params: ImageRequest
   - return: ImageResponse
 
 
-### structure
+# Structure
 
+## Topiq 
 <b>TopiqModel</b>
-```
-struct TopiqModel {
-    region: string,
-    streamType: string,
-    channel: string,
-    bitrateType: string,
+```ts
+class TopiqModel {
+    public region: string,
+    public streamType: string,
+    public channel: string,
+    public bitrateType: string,
 
-    topiq_nr: number,
-    topiq_nr-flive: number,
-    topiq_nr-spaq: number,
+    public topiq_nr: number,
+    public "topiq_nr-flive": number,
+    public "topiq_nr-spaq": number,
 
-    timestamp: number
+    public timestamp: number
 }
 ```
 - region: 地區，例如: CEBU。
@@ -42,52 +36,61 @@ struct TopiqModel {
 - topiq_nr-spqa: 待補充。
 - timestamp: number
 
----
+
+<b>TopiqRequest</b>
+```ts
+class TopiqRequest {
+	public region: string;
+	public streamType: string;
+	public bitrateType: string;
+}
+```
+<b>TopiqData</b>
+```ts
+class TopiqData {
+	public region: string;
+	public streamType: string;
+	public channel: string;
+	public bitrateType: string;
+
+	public nr_list: number[];
+	public nr_flive_list: number[];
+	public nr_spqa_list: number[];
+
+	public timestamp_list: number[];
+}
+```
 <b>TopiqResponse</b>
-```
-struct TopiqResponse {
-    region: string;
-    streamType: string;
-    channel: string;
-    bitrateType: string;
-
-    nr_list: number[]; //limit 20
-    nr_flive_list: number[]; //limit 20
-    nr_spaq_list: number[]; //limit 20
-    
-    timestamp_list: number[] //limit 20
+```ts
+class TopiqResponse {
+	public list: TopiqData[]
 }
 ```
-
 ---
-
-<b>TopiqResponseList</b>
-```
-struct TopiqResponseList {
-  list: TopiqResponse[],
-}
-```
-
-- errorCode
-  - 0: success
-- list: 篩選資料
-
----
-
+## Image
 <b>ImageModel</b>
-```
-struct ImageModel {
-  id: string;
-  buffer: Buffer;
+```ts
+class ImageModel {
+  public id: string;
+  public buffer: Buffer;
 }
 ```
 
----
+<b>ImageRequest</b>
+```ts
+class ImageRequest {
+	public region: string;
+	public streamType: string;
+	public channel: string;
+	public timestamp: number;
+}
+```
+
 <b>ImageResponse</b>
 
-```
-struct ImageResponse {
-  imageSrc: string;
+```ts
+class ImageResponse {
+	public src: string;
 }
 ```
 
