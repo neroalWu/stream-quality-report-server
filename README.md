@@ -1,28 +1,28 @@
 # API
 
 ## stream-quality-report
-- get-stream-quality-report-response
+- get-topiq-response-list
   - query
     - region: string
     - streamType: string
     - bitrateType: string
-  - return : StreamQualityReportResponse
-- get-screenshot
+  - return : TopiqResponseList
+- get-image-response
   - query
     - region: string
     - streamType: string
     - channel: string
     - timestamp: number
-    - return: Base64
+    - return: ImageResponse
 
 
 ### structure
 
-<b>Topia</b>
+<b>Topiq</b>
 <p>資料庫儲存類型</p>
 
 ```
-struct Topia {
+struct Topiq {
     region: string,
     streamType: string,
     channel: string,
@@ -59,10 +59,9 @@ struct TopiqResponse {
 
 ---
 
-<b>StreamQualityReportResponse</b>
+<b>TopiqResponseList</b>
 ```
-struct StreamQualityReportResponse {
-  errorCode: number,
+struct TopiqResponseList {
   list: TopiqResponse[],
 }
 ```
@@ -78,6 +77,15 @@ struct StreamQualityReportResponse {
 struct ImageModel {
   id: string;
   buffer: Buffer;
+}
+```
+
+---
+<b>ImageResponse</b>
+
+```
+struct ImageResponse {
+  imageSrc: string;
 }
 ```
 
