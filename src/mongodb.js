@@ -47,6 +47,11 @@ class MongoDB {
         })
     }
 
+    async GetImageBase64(id) {
+        const imageModel = await ImageModel.findOne({ id: id })
+        return imageModel ? imageModel.buffer.toString('base64') : ''
+    }
+
     async get_field_list(stream, fieldName) {
         try {
             const result = await TopiqModel.find({

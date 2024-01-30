@@ -1,7 +1,7 @@
 var express = require('express')
 var router = express.Router()
 var mongoDBInstance = require('../src/mongodb')
-var ImageModel = require('../src/model/image-model')
+const Util = require('../src/util')
 
 function handleError(res, error) {
     res.status(500).send({
@@ -12,6 +12,11 @@ function handleError(res, error) {
 
 router.post('/get-topiq-response-list', async (req, res) => {
     try {
+        const isValid = Util.ValidPostBody(req.body, ['region', 'streamType', 'bitrateType'])
+        if (!isValid) {
+            handleError(res, 'Missing required parameters.')
+            return
+        }
         const topiqList = await mongoDBInstance.GetTopiqList(req.body)
 
         res.send({ list: topiqList })
@@ -23,21 +28,15 @@ router.post('/get-topiq-response-list', async (req, res) => {
 
 router.post('/get-screenshot', async (req, res) => {
     try {
-        const { region, streamType, channel, timestamp } = req.body
-
-        if (!region || !streamType || !channel || !timestamp) {
-            handleError(res, 'parameter error')
+        const isValid = Util.ValidPostBody(req.body, ['region', 'streamType', 'channel', 'timestamp'])
+        if (!isValid) {
+            handleError(res, 'Missing required parameters.')
             return
         }
+        const { region, streamType, channel, timestamp } = req.body
 
         const id = `${region}_${streamType}_${channel}_${timestamp}`
-
-        const imageModel = await ImageModel.findOne({ id: id })
-
-        let base64Image = ''
-
-        imageModel &&
-            (base64Image = `data:image/png;base64,${imageModel.buffer.toString('base64')}`)
+        const base64Image = await mongoDBInstance.GetImageBase64(id)
 
         res.send({ imageSrc: base64Image })
     } catch (error) {
