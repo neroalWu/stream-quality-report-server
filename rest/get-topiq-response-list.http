@@ -1,10 +1,9 @@
 @host =  http://localhost:3000/stream-quality-report
-POST {{host}}/get-screenshot
+POST {{host}}/get-topiq-response-list
 Content-Type: application/json
 
 {
     "region": "CEBU",
     "streamType": "RTMP",
-    "channel": "BTCB02",
-    "timestamp": 1706523840005
+    "bitrateType": "LOW"
 }

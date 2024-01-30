@@ -19,13 +19,13 @@ class MongoDB {
         }
     }
 
-    async GetTopiqList(queryRegion = '', queryStreamType = '', queryBitrateType = '') {
+    async GetTopiqList(postBody) {
+        const { region, streamType, bitrateType } = postBody
+
         const filterStreams = CONFIGURATION.STREAM_LIST.filter((stream) => {
-            const regionMatch = queryRegion != '' ? stream.region == queryRegion : true
-            const streamTypeMatch =
-                queryStreamType != '' ? stream.streamType == queryStreamType : true
-            const bitrateTypeMatch =
-                queryBitrateType != '' ? stream.bitrateType == queryBitrateType : true
+            const regionMatch = region != '' ? stream.region == region : true
+            const streamTypeMatch = streamType != '' ? stream.streamType == streamType : true
+            const bitrateTypeMatch = bitrateType != '' ? stream.bitrateType == bitrateType : true
 
             return regionMatch && streamTypeMatch && bitrateTypeMatch
         })

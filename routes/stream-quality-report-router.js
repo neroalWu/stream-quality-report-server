@@ -1,6 +1,5 @@
 var express = require('express')
 var router = express.Router()
-var ERRORCODE = require('../src/errorcode').STREAM_QUALITY_REPORT
 var mongoDBInstance = require('../src/mongodb')
 var ImageModel = require('../src/model/image-model')
 
@@ -11,43 +10,36 @@ function handleError(res, error) {
     })
 }
 
-router.get('/get-stream-quality-report-response', async (req, res) => {
+router.post('/get-topiq-response-list', async (req, res) => {
     try {
-        const queryRegion = req.query.region ? req.query.region : ''
-        const queryStreamType = req.query.streamType ? req.query.streamType : ''
-        const queryBitrateType = req.query.bitrateType ? req.query.bitrateType : ''
+        const topiqList = await mongoDBInstance.GetTopiqList(req.body)
 
-        const topiqList = await mongoDBInstance.GetTopiqList(
-            queryRegion,
-            queryStreamType,
-            queryBitrateType
-        )
-
-        res.send({
-            errorCode: ERRORCODE.SUCCESS,
-            list: topiqList
-        })
+        res.send({ list: topiqList })
     } catch (error) {
+        console.log(error)
         handleError(res, error)
     }
 })
 
-router.get('/get-screenshot', async (req, res) => {
+router.post('/get-screenshot', async (req, res) => {
     try {
-        const { region, streamType, channel, timestamp } = req.query
-        const queryRegion = region ? region : ''
-        const queryStreamType = streamType ? streamType : ''
-        const queryChannel = channel ? channel : ''
-        const queryTimestamp = timestamp ? timestamp : ''
-        const id = `${queryRegion}_${queryStreamType}_${queryChannel}_${queryTimestamp}`
+        const { region, streamType, channel, timestamp } = req.body
+
+        if (!region || !streamType || !channel || !timestamp) {
+            handleError(res, 'parameter error')
+            return
+        }
+
+        const id = `${region}_${streamType}_${channel}_${timestamp}`
 
         const imageModel = await ImageModel.findOne({ id: id })
 
         let base64Image = ''
 
-        imageModel && (base64Image = `data:image/png;base64,${imageModel.buffer.toString('base64')}`)
+        imageModel &&
+            (base64Image = `data:image/png;base64,${imageModel.buffer.toString('base64')}`)
 
-        res.send(base64Image)
+        res.send({ imageSrc: base64Image })
     } catch (error) {
         console.log(error)
         handleError(res, error)
