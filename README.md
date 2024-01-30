@@ -2,34 +2,34 @@
 
 ## stream-quality-report
 - get-topiq-response-list
-  - query
+  - body
     - region: string
     - streamType: string
     - bitrateType: string
   - return : TopiqResponseList
 - get-image-response
-  - query
+  - body
     - region: string
     - streamType: string
     - channel: string
     - timestamp: number
-    - return: ImageResponse
+  - return: ImageResponse
 
 
 ### structure
 
-<b>Topiq</b>
-<p>資料庫儲存類型</p>
-
+<b>TopiqModel</b>
 ```
-struct Topiq {
+struct TopiqModel {
     region: string,
     streamType: string,
     channel: string,
     bitrateType: string,
+
     topiq_nr: number,
     topiq_nr-flive: number,
-    topiq_nr-spaq: number
+    topiq_nr-spaq: number,
+
     timestamp: number
 }
 ```
@@ -50,9 +50,11 @@ struct TopiqResponse {
     streamType: string;
     channel: string;
     bitrateType: string;
+
     nr_list: number[]; //limit 20
     nr_flive_list: number[]; //limit 20
     nr_spaq_list: number[]; //limit 20
+    
     timestamp_list: number[] //limit 20
 }
 ```
