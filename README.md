@@ -1,9 +1,9 @@
 # API
-- get-topiq-response-list
+- get-topiq-data
   - method: POST
   - params: TopiqRequest
   - return: TopiqResponse
-- get-image-response
+- get-image
   - mtehod: POST
   - params: ImageRequest
   - return: ImageResponse
