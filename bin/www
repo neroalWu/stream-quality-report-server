@@ -48,7 +48,7 @@ function onError(error) {
     }
 }
 
-function onListening() {
+function onListening(server) {
     const addr = server.address()
     const bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port
     debug('Listening on ' + bind)
@@ -63,7 +63,9 @@ async function main() {
     const server = http.createServer(app)
     server.listen(port)
     server.on('error', onError)
-    server.on('listening', onListening)
+    server.on('listening', () => {
+        onListening(server)
+    })
 }
 
 main()
