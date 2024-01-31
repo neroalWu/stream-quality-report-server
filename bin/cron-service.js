@@ -1,24 +1,37 @@
 #!/usr/bin/env node
 
-const cron = require('../src/cron-job')
 const axios = require('axios').default
 const ffmpeg = require('fluent-ffmpeg')
 const CONFIGURATION = require('../src/configuration')
 const mongoDBInstance = require('../src/mongodb')
+const Logger = require('../src/util/logger')
+const CronJob = require('cron').CronJob
 
-class StreamQualityService {
+class CronService {
     constructor() {
         this.cronJob = null
         this.delay = 1000
         this.timestamp = 0
+        this.logger = new Logger('CronService')
     }
 
     Init() {
-        console.log('Init StreamQualityService')
-        this.cronJob = cron.StartJob(this.HandleCronJob.bind(this))
+        this.logger.Log('Init')
+        this.cronJob = this.startJob(this.handleCronJob.bind(this))
     }
 
-    async HandleCronJob() {
+    startJob(callback) {
+        this.logger.Log('Start Job')
+        return new CronJob(CONFIGURATION.CRON_TIME, () => callback(), null, true, 'Asia/Taipei')
+    }
+
+    stopJob(job) {
+        this.logger.Log('Stop Job')
+
+        job && job.stop && job.stop()
+    }
+
+    async handleCronJob() {
         this.timestamp = Date.now()
 
         const queue = CONFIGURATION.STREAM_LIST.reduce(async (acc, stream) => {
@@ -29,13 +42,12 @@ class StreamQualityService {
         }, Promise.resolve())
 
         await queue
-
-        console.log('All streams have benn processed')
     }
 
     async processImage(streamConfig) {
-        console.log('processImage:', streamConfig.channel)
-        return new Promise((resolve, reject) => {
+        this.logger.Log('Process Image:', streamConfig.channel)
+
+        return new Promise((resolve) => {
             const screenShotStream = ffmpeg(`${streamConfig.source}${streamConfig.channel}`)
                 .frames(1)
                 .toFormat('image2')
@@ -53,12 +65,15 @@ class StreamQualityService {
 
                 resolve()
             })
-            screenShotStream.on('error', reject)
+            screenShotStream.on('error', (error) => {
+                this.logger.Error(`${streamConfig.channel} fail!`, error)
+                resolve()
+            })
         })
     }
 
     async processTopiq(streamConfig) {
-        console.log(`Process stream:: ${streamConfig.channel}`)
+        this.logger.Log('Process topiq:', streamConfig.channel)
 
         try {
             const response = await axios.post(streamConfig.server, {
@@ -66,14 +81,14 @@ class StreamQualityService {
                 duration: 3,
                 region: streamConfig.region,
                 streamType: streamConfig.streamType,
-                bitrateType: streamConfig.bitrateType,
+                resolution: streamConfig.resolution,
                 channel: streamConfig.channel
             })
 
             const topiq = this.topiqParser(response)
             mongoDBInstance.CreateTopiq(topiq)
         } catch (error) {
-            console.error(`Error for ${streamConfig.server}: ${error}`)
+            this.logger.Error(`Error for ${streamConfig.server} ${error}`)
         }
     }
 
@@ -83,7 +98,7 @@ class StreamQualityService {
 
         this.appendRegion(result, config)
         this.appendStreamType(result, config)
-        this.appendBitrateType(result, config)
+        this.appendResolution(result, config)
         this.appendChannel(result, config)
         this.appendTimestamp(result, this.timestamp)
 
@@ -102,9 +117,9 @@ class StreamQualityService {
         }
     }
 
-    appendBitrateType(topiq, config) {
-        if ('bitrateType' in config) {
-            Object.assign(topiq, { bitrateType: config.bitrateType })
+    appendResolution(topiq, config) {
+        if ('resolution' in config) {
+            Object.assign(topiq, { resolution: config.resolution })
         }
     }
 
@@ -117,20 +132,13 @@ class StreamQualityService {
     appendTimestamp(topiq, timestamp) {
         Object.assign(topiq, { timestamp: timestamp })
     }
-
-    Close() {
-        cron.StopJob(this.cronJob)
-    }
 }
 
 async function main() {
-    await mongoDBInstance.Connect(
-        CONFIGURATION.MONGODB_CONFIG.URI,
-        CONFIGURATION.MONGODB_CONFIG.COLLECTION
-    )
+    await mongoDBInstance.Connect(CONFIGURATION.MONGODB_URL)
 
-    const streamQualityServiceInstance = new StreamQualityService()
-    streamQualityServiceInstance.Init()
+    const cronService = new CronService()
+    cronService.Init()
 }
 
 main()
