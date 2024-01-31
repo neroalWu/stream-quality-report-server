@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const CONFIGURATION = require('../configuration')
+const Logger = require('../util/logger')
 
 const ImageModel = require('../model/image-model')
 const TopiqModel = require('../model/topiq-model')
@@ -7,33 +8,34 @@ const TopiqModel = require('../model/topiq-model')
 class MongoService {
     constructor() {
         this.limitCount = 20
+        this.logger = new Logger('MongoService')
     }
 
     async Connect(uri) {
+        this.logger.Log('connecting.')
         try {
             await mongoose.connect(uri)
-            console.log('MongoDB connect success.')
+            console.log('connected success!')
         } catch (error) {
-            console.error('Error connecting to MongoDB:', error)
-            throw error
+            console.error('cconnected failed!', error)
         }
     }
 
-    async GetTopiqList(postBody) {
-        const { region, streamType, bitrateType } = postBody
+    async GetTopiqDataList(postBody) {
+        const { region, streamType, resolution } = postBody
 
         const filterStreams = CONFIGURATION.STREAM_LIST.filter((stream) => {
             const regionMatch = region != '' ? stream.region == region : true
             const streamTypeMatch = streamType != '' ? stream.streamType == streamType : true
-            const bitrateTypeMatch = bitrateType != '' ? stream.bitrateType == bitrateType : true
+            const resolutionMatch = resolution != '' ? stream.resolution == resolution : true
 
-            return regionMatch && streamTypeMatch && bitrateTypeMatch
+            return regionMatch && streamTypeMatch && resolutionMatch
         })
 
-        const topiqResponse = await this.create_topiq_response(filterStreams)
-        const validResponse = topiqResponse.filter((x) => x.timestamp_list.length > 0)
+        const topiqDataList = await this.createTopiqDataList(filterStreams)
+        const validDataList = topiqDataList.filter((x) => x.timestamp_list.length > 0)
 
-        return validResponse
+        return validDataList
     }
 
     async CreateTopiq(topiq) {
@@ -52,12 +54,12 @@ class MongoService {
         return imageModel ? `data:image/png;base64,${imageModel.buffer.toString('base64')}` : ''
     }
 
-    async get_field_list(stream, fieldName) {
+    async getFieldList(stream, fieldName) {
         try {
             const result = await TopiqModel.find({
                 region: { $eq: stream.region },
                 streamType: { $eq: stream.streamType },
-                bitrateType: { $eq: stream.bitrateType },
+                resolution: { $eq: stream.resolution },
                 channel: { $eq: stream.channel }
             })
                 .sort({ _id: -1 })
@@ -66,12 +68,12 @@ class MongoService {
             const list = result.map((topiq) => topiq[fieldName])
             return list
         } catch (error) {
-            console.log(error)
-            throw error
+            this.logger.Error('get field list failed:', error)
+            return []
         }
     }
 
-    async create_topiq_response(filter_list) {
+    async createTopiqDataList(filter_list) {
         const result = Promise.all(
             filter_list.map(async (stream) => {
                 return {
@@ -80,10 +82,10 @@ class MongoService {
                     bitrateType: stream.bitrateType,
                     channel: stream.channel,
 
-                    nr_list: await this.get_field_list(stream, 'topiq_nr'),
-                    nr_flive_list: await this.get_field_list(stream, 'topiq_nr-flive'),
-                    nr_spaq_list: await this.get_field_list(stream, 'topiq_nr-spaq'),
-                    timestamp_list: await this.get_field_list(stream, 'timestamp')
+                    nr_list: await this.getFieldList(stream, 'topiq_nr'),
+                    nr_flive_list: await this.getFieldList(stream, 'topiq_nr-flive'),
+                    nr_spaq_list: await this.getFieldList(stream, 'topiq_nr-spaq'),
+                    timestamp_list: await this.getFieldList(stream, 'timestamp')
                 }
             })
         )
