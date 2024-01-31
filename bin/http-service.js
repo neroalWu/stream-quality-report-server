@@ -8,12 +8,12 @@ var app = require('../app')
 var debug = require('debug')('stream-quality-report-server:server')
 var http = require('http')
 var CONFIGURATION = require('../src/configuration')
-var mongoDBInstance = require('../src/mongodb')
+const MongoService = require('../src/service/mongo-service')
 
 /**
  * Initialize Instance
  */
-mongoDBInstance.Connect(CONFIGURATION.MONGODB_URL)
+MongoService.Connect(CONFIGURATION.MONGODB_URL)
 /**
  * Get port from environment and store in Express.
  */

@@ -1,7 +1,7 @@
 var express = require('express')
 var router = express.Router()
-var mongoDBInstance = require('../src/mongodb')
-const Util = require('../src/util')
+const MongoService = require('../src/service/mongo-service')
+const Util = require('../src/util/util')
 
 function handleError(res, error) {
     res.status(500).send({
@@ -17,7 +17,7 @@ router.post('/get-topiq-data', async (req, res) => {
             handleError(res, 'Missing required parameters.')
             return
         }
-        const topiqList = await mongoDBInstance.GetTopiqList(req.body)
+        const topiqList = await MongoService.GetTopiqList(req.body)
 
         res.send({ list: topiqList })
     } catch (error) {
@@ -36,7 +36,7 @@ router.post('/get-image', async (req, res) => {
         const { region, streamType, channel, timestamp } = req.body
 
         const id = `${region}_${streamType}_${channel}_${timestamp}`
-        const base64Image = await mongoDBInstance.GetImageBase64(id)
+        const base64Image = await MongoService.GetImageBase64(id)
 
         res.send({ src: base64Image })
     } catch (error) {

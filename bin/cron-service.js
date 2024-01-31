@@ -3,7 +3,7 @@
 const axios = require('axios').default
 const ffmpeg = require('fluent-ffmpeg')
 const CONFIGURATION = require('../src/configuration')
-const mongoDBInstance = require('../src/mongodb')
+const MongoService = require('../src/service/mongo-service')
 const Logger = require('../src/util/logger')
 const CronJob = require('cron').CronJob
 
@@ -58,10 +58,9 @@ class CronService {
                 buffers.push(chunk)
             })
             screenShotStream.on('end', async () => {
-                //save image to mongodb
                 const buffer = Buffer.concat(buffers)
                 const id = `${streamConfig.region}_${streamConfig.streamType}_${streamConfig.channel}_${this.timestamp}`
-                mongoDBInstance.CreateImage(id, buffer)
+                MongoService.CreateImage(id, buffer)
 
                 resolve()
             })
@@ -86,7 +85,7 @@ class CronService {
             })
 
             const topiq = this.topiqParser(response)
-            mongoDBInstance.CreateTopiq(topiq)
+            MongoService.CreateTopiq(topiq)
         } catch (error) {
             this.logger.Error(`Error for ${streamConfig.server} ${error}`)
         }
@@ -135,7 +134,7 @@ class CronService {
 }
 
 async function main() {
-    await mongoDBInstance.Connect(CONFIGURATION.MONGODB_URL)
+    await MongoService.Connect(CONFIGURATION.MONGODB_URL)
 
     const cronService = new CronService()
     cronService.Init()
