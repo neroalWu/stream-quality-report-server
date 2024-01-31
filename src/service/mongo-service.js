@@ -79,7 +79,7 @@ class MongoService {
                 return {
                     region: stream.region,
                     streamType: stream.streamType,
-                    bitrateType: stream.bitrateType,
+                    resolution: stream.resolution,
                     channel: stream.channel,
 
                     nr_list: await this.getFieldList(stream, 'topiq_nr'),
