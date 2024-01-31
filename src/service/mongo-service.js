@@ -12,12 +12,12 @@ class MongoService {
     }
 
     async Connect(uri) {
-        this.logger.Log('connecting.')
+        this.logger.Log('connecting...')
         try {
             await mongoose.connect(uri)
-            console.log('connected success!')
+            this.logger.Log('connected success!')
         } catch (error) {
-            console.error('cconnected failed!', error)
+            this.logger.Error('connected failed!', error)
         }
     }
 
