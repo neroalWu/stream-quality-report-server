@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start_cron": "nodemon ./bin/cron-service",
-    "start_server": "nodemon ./bin/http-service"
+    "start_http": "nodemon ./bin/http-service"
   },
   "dependencies": {
     "axios": "^1.6.5",
