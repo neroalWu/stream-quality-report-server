@@ -18,7 +18,7 @@ class TopiqModel {
     public region: string,
     public streamType: string,
     public channel: string,
-    public bitrateType: string,
+    public resolution: string,
 
     public topiq_nr: number,
     public "topiq_nr-flive": number,
@@ -30,7 +30,7 @@ class TopiqModel {
 - region: 地區，例如: CEBU。
 - streamType: 協定類型，例如: RTMP。
 - channel: 桌號，例如: BTCB02。
-- bitrateType: 畫質，例如: High。
+- resolution: 解析度，例如: HD(720p)。
 - topiq_nr: 待補充。
 - topiq_nr-flive: 待補充。
 - topiq_nr-spqa: 待補充。
@@ -42,7 +42,7 @@ class TopiqModel {
 class TopiqRequest {
 	public region: string;
 	public streamType: string;
-	public bitrateType: string;
+	public resolution: string;
 }
 ```
 <b>TopiqData</b>
@@ -51,7 +51,7 @@ class TopiqData {
 	public region: string;
 	public streamType: string;
 	public channel: string;
-	public bitrateType: string;
+	public resolution: string;
 
 	public nr_list: number[];
 	public nr_flive_list: number[];

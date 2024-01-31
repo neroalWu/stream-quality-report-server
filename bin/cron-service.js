@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 const cron = require('../src/cron-job')
 const axios = require('axios').default
 const ffmpeg = require('fluent-ffmpeg')

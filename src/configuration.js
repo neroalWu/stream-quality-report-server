@@ -1,8 +1,6 @@
 const CONFIGURATION = {}
 
-const DEBUG = true
-
-const DEBUG_SERVER_URL = 'http://localhost:3000/stream-quality-report/calculate_topiq'
+const DEBUG = false
 
 const REGION_TYPE = {
     CEBU: 'CEBU'
@@ -18,8 +16,11 @@ const BITRATE_TYPE = {
     LOW: 'LOW'
 }
 
+// http://10.20.30.130:8000/rtmp/calculate_topiq
 const SERVER_URL = {
-    [STREAM_TYPE.RTMP]: DEBUG ? DEBUG_SERVER_URL : 'http://10.20.30.130:8000/rtmp/calculate_topiq'
+    [STREAM_TYPE.RTMP]: DEBUG
+        ? 'http://localhost:3000/stream-quality-report/calculate_topiq'
+        : 'http://10.20.30.228:3000/stream-quality-report/calculate_topiq'
 }
 
 const SOURCE_URL = {
@@ -30,7 +31,8 @@ const SOURCE_APPEND = {
     [REGION_TYPE.CEBU]: 'cb/'
 }
 
-CONFIGURATION.CRON_TIME = DEBUG ? '*/5 * * * *' : '*/10 11-18 * * 1-5'
+// */10 11-18 * * 1-5
+CONFIGURATION.CRON_TIME = DEBUG ? '*/5 * * * *' : '*/5 * * * *'
 
 CONFIGURATION.STREAM_LIST = [
     {
@@ -96,11 +98,11 @@ CONFIGURATION.STREAM_LIST = [
         bitrateType: BITRATE_TYPE.HIGH,
         channel: 'BTCB05',
         source: `${SOURCE_URL[STREAM_TYPE.RTMP]}${SOURCE_APPEND[REGION_TYPE.CEBU]}`
-    },
+    }
 ]
 
 CONFIGURATION.MONGODB_CONFIG = {
-    URI: 'mongodb://localhost:27017/stream-quality-report-db',
+    URI: 'mongodb://127.0.0.1:27017/stream-quality-report-db'
 }
 
 module.exports = CONFIGURATION
