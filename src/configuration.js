@@ -33,7 +33,7 @@ const SOURCE_APPEND = {
 }
 
 // */10 11-18 * * 1-5
-CONFIGURATION.CRON_TIME = DEBUG ? '*/1 * * * *' : '*/5 * * * *'
+CONFIGURATION.CRON_TIME = DEBUG ? '*/30 * * * * *' : '*/5 * * * *'
 
 CONFIGURATION.STREAM_LIST = [
     {
