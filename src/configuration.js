@@ -1,6 +1,6 @@
 const CONFIGURATION = {}
 
-const DEBUG = false
+const DEBUG = true
 
 const REGION_TYPE = {
     CEBU: 'CEBU'
@@ -11,9 +11,10 @@ const STREAM_TYPE = {
     FLV: 'FLV'
 }
 
-const BITRATE_TYPE = {
-    HIGH: 'HIGH',
-    LOW: 'LOW'
+const RESOLUTION = {
+    SD: '480p',
+    HD: '720p',
+    FULL_HD: '1080p'
 }
 
 // http://10.20.30.130:8000/rtmp/calculate_topiq
@@ -32,14 +33,14 @@ const SOURCE_APPEND = {
 }
 
 // */10 11-18 * * 1-5
-CONFIGURATION.CRON_TIME = DEBUG ? '*/5 * * * *' : '*/5 * * * *'
+CONFIGURATION.CRON_TIME = DEBUG ? '*/1 * * * *' : '*/5 * * * *'
 
 CONFIGURATION.STREAM_LIST = [
     {
         region: REGION_TYPE.CEBU,
         server: SERVER_URL[STREAM_TYPE.RTMP],
         streamType: STREAM_TYPE.RTMP,
-        bitrateType: BITRATE_TYPE.LOW,
+        resolution: RESOLUTION.HD,
         channel: 'BTCB02m',
         source: `${SOURCE_URL[STREAM_TYPE.RTMP]}${SOURCE_APPEND[REGION_TYPE.CEBU]}`
     },
@@ -47,7 +48,7 @@ CONFIGURATION.STREAM_LIST = [
         region: REGION_TYPE.CEBU,
         server: SERVER_URL[STREAM_TYPE.RTMP],
         streamType: STREAM_TYPE.RTMP,
-        bitrateType: BITRATE_TYPE.LOW,
+        resolution: RESOLUTION.HD,
         channel: 'BTCB03m',
         source: `${SOURCE_URL[STREAM_TYPE.RTMP]}${SOURCE_APPEND[REGION_TYPE.CEBU]}`
     },
@@ -55,7 +56,7 @@ CONFIGURATION.STREAM_LIST = [
         region: REGION_TYPE.CEBU,
         server: SERVER_URL[STREAM_TYPE.RTMP],
         streamType: STREAM_TYPE.RTMP,
-        bitrateType: BITRATE_TYPE.LOW,
+        resolution: RESOLUTION.HD,
         channel: 'BTCB04m',
         source: `${SOURCE_URL[STREAM_TYPE.RTMP]}${SOURCE_APPEND[REGION_TYPE.CEBU]}`
     },
@@ -63,7 +64,7 @@ CONFIGURATION.STREAM_LIST = [
         region: REGION_TYPE.CEBU,
         server: SERVER_URL[STREAM_TYPE.RTMP],
         streamType: STREAM_TYPE.RTMP,
-        bitrateType: BITRATE_TYPE.LOW,
+        resolution: RESOLUTION.HD,
         channel: 'BTCB05m',
         source: `${SOURCE_URL[STREAM_TYPE.RTMP]}${SOURCE_APPEND[REGION_TYPE.CEBU]}`
     },
@@ -71,7 +72,7 @@ CONFIGURATION.STREAM_LIST = [
         region: REGION_TYPE.CEBU,
         server: SERVER_URL[STREAM_TYPE.RTMP],
         streamType: STREAM_TYPE.RTMP,
-        bitrateType: BITRATE_TYPE.HIGH,
+        resolution: RESOLUTION.FULL_HD,
         channel: 'BTCB02',
         source: `${SOURCE_URL[STREAM_TYPE.RTMP]}${SOURCE_APPEND[REGION_TYPE.CEBU]}`
     },
@@ -79,7 +80,7 @@ CONFIGURATION.STREAM_LIST = [
         region: REGION_TYPE.CEBU,
         server: SERVER_URL[STREAM_TYPE.RTMP],
         streamType: STREAM_TYPE.RTMP,
-        bitrateType: BITRATE_TYPE.HIGH,
+        resolution: RESOLUTION.FULL_HD,
         channel: 'BTCB03',
         source: `${SOURCE_URL[STREAM_TYPE.RTMP]}${SOURCE_APPEND[REGION_TYPE.CEBU]}`
     },
@@ -87,7 +88,7 @@ CONFIGURATION.STREAM_LIST = [
         region: REGION_TYPE.CEBU,
         server: SERVER_URL[STREAM_TYPE.RTMP],
         streamType: STREAM_TYPE.RTMP,
-        bitrateType: BITRATE_TYPE.HIGH,
+        resolution: RESOLUTION.FULL_HD,
         channel: 'BTCB04',
         source: `${SOURCE_URL[STREAM_TYPE.RTMP]}${SOURCE_APPEND[REGION_TYPE.CEBU]}`
     },
@@ -95,14 +96,12 @@ CONFIGURATION.STREAM_LIST = [
         region: REGION_TYPE.CEBU,
         server: SERVER_URL[STREAM_TYPE.RTMP],
         streamType: STREAM_TYPE.RTMP,
-        bitrateType: BITRATE_TYPE.HIGH,
+        resolution: RESOLUTION.FULL_HD,
         channel: 'BTCB05',
         source: `${SOURCE_URL[STREAM_TYPE.RTMP]}${SOURCE_APPEND[REGION_TYPE.CEBU]}`
     }
 ]
 
-CONFIGURATION.MONGODB_CONFIG = {
-    URI: 'mongodb://127.0.0.1:27017/stream-quality-report-db'
-}
+CONFIGURATION.MONGODB_URL = 'mongodb://127.0.0.1:27017/stream-quality-report-db'
 
 module.exports = CONFIGURATION
