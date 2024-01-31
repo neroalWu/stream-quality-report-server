@@ -3,7 +3,7 @@ const Logger = require('./util/logger')
 const CronJob = require('cron').CronJob
 class CronService {
     constructor() {
-        this.logger = new Logger('CronJob')
+        this.logger = new Logger('CronService')
     }
 
     StartJob(callback) {
