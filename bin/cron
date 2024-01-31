@@ -1,0 +1,13 @@
+#!/usr/bin/env node
+const MongoService = require('../src/service/mongo-service')
+const CONFIGURATION = require('../src/configuration')
+const CronService = require('../src/service/cron-service')
+
+async function main() {
+    await MongoService.Connect(CONFIGURATION.MONGODB_URL)
+
+    const cronService = new CronService()
+    cronService.Init()
+}
+
+main()

@@ -1,10 +1,8 @@
-#!/usr/bin/env node
-
 const axios = require('axios').default
 const ffmpeg = require('fluent-ffmpeg')
-const CONFIGURATION = require('../src/configuration')
-const MongoService = require('../src/service/mongo-service')
-const Logger = require('../src/util/logger')
+const CONFIGURATION = require('../configuration')
+const MongoService = require('./mongo-service')
+const Logger = require('../util/logger')
 const CronJob = require('cron').CronJob
 
 class CronService {
@@ -133,11 +131,5 @@ class CronService {
     }
 }
 
-async function main() {
-    await MongoService.Connect(CONFIGURATION.MONGODB_URL)
-
-    const cronService = new CronService()
-    cronService.Init()
-}
-
-main()
+const cronService = new CronService()
+module.exports = cronService
