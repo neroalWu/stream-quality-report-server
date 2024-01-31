@@ -1,7 +1,10 @@
-var express = require('express')
-var router = express.Router()
+const express = require('express')
+const router = express.Router()
 const MongoService = require('../src/service/mongo-service')
 const Util = require('../src/util/util')
+const Logger = require('../src/util/logger')
+
+const logger = new Logger('StreamQualityReportRouter')
 
 function handleError(res, error) {
     res.status(500).send({
@@ -12,16 +15,16 @@ function handleError(res, error) {
 
 router.post('/get-topiq-data', async (req, res) => {
     try {
-        const isValid = Util.ValidPostBody(req.body, ['region', 'streamType', 'bitrateType'])
+        const isValid = Util.ValidPostBody(req.body, ['region', 'streamType', 'resolution'])
         if (!isValid) {
             handleError(res, 'Missing required parameters.')
             return
         }
-        const topiqList = await MongoService.GetTopiqList(req.body)
+        const topiqDataList = await MongoService.GetTopiqDataList(req.body)
 
-        res.send({ list: topiqList })
+        res.send({ list: topiqDataList })
     } catch (error) {
-        console.log(error)
+        logger.Error('error get-topiq-data', error)
         handleError(res, error)
     }
 })
@@ -40,6 +43,7 @@ router.post('/get-image', async (req, res) => {
 
         res.send({ src: base64Image })
     } catch (error) {
+        logger.Error('error get-image', error)
         console.log(error)
         handleError(res, error)
     }
