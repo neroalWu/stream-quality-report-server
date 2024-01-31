@@ -3,7 +3,7 @@ const mongoose = require('mongoose')
 const TopiqModel = mongoose.model('topiq', {
     region: String,
     streamType: String,
-    bitrateType: String,
+    resolution: String,
     channel: String,
 
     topiq_nr: Number,
