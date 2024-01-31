@@ -5,5 +5,5 @@ Content-Type: application/json
 {
     "region": "CEBU",
     "streamType": "RTMP",
-    "bitrateType": "LOW"
+    "resolution": "720p"
 }
