@@ -51,9 +51,13 @@ class CronService {
             const screenShotStream = ffmpeg(`${streamConfig.source}${streamConfig.channel}`)
                 .frames(1)
                 .toFormat('image2')
+                .on('error', (error) => {
+                    this.logger.Error(`${streamConfig.channel} fail!`, error)
+                    resolve()
+                })
                 .pipe()
 
-            const buffers = []
+            let buffers = []
             screenShotStream.on('data', (chunk) => {
                 buffers.push(chunk)
             })
@@ -62,10 +66,6 @@ class CronService {
                 const id = `${streamConfig.region}_${streamConfig.streamType}_${streamConfig.channel}_${this.timestamp}`
                 MongoService.CreateImage(id, buffer)
 
-                resolve()
-            })
-            screenShotStream.on('error', (error) => {
-                this.logger.Error(`${streamConfig.channel} fail!`, error)
                 resolve()
             })
         })
@@ -87,21 +87,21 @@ class CronService {
             const topiq = this.topiqParser(response)
             MongoService.CreateTopiq(topiq)
         } catch (error) {
-            this.logger.Error(`Error for ${streamConfig.server} ${error}`)
+            this.logger.Error(`Process topiq error: ${streamConfig.server} ${error}`)
         }
     }
 
-    topiqParser(response) {
-        const config = JSON.parse(response.config.data)
-        let result = response.data
+    topiqParser(source) {
+        const config = JSON.parse(source.config.data)
+        let destination = source.data
 
-        this.appendRegion(result, config)
-        this.appendStreamType(result, config)
-        this.appendResolution(result, config)
-        this.appendChannel(result, config)
-        this.appendTimestamp(result, this.timestamp)
+        this.appendRegion(destination, config)
+        this.appendStreamType(destination, config)
+        this.appendResolution(destination, config)
+        this.appendChannel(destination, config)
+        this.appendTimestamp(destination, this.timestamp)
 
-        return result
+        return destination
     }
 
     appendRegion(topiq, config) {
