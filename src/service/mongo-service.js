@@ -78,7 +78,7 @@ class MongoService {
             filter_list.map(async (stream) => {
                 const nr_reverse_list = (await this.getFieldList(stream, 'topiq_nr')).reverse()
                 const flive_reverse_list = (
-                    await this.getFieldList(stream, 'topiq_nr-spaq')
+                    await this.getFieldList(stream, 'topiq_nr-flive')
                 ).reverse()
                 const spaq_reverse_list = (
                     await this.getFieldList(stream, 'topiq_nr-spaq')
