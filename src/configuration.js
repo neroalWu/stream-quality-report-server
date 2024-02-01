@@ -1,6 +1,6 @@
 const CONFIGURATION = {}
 
-const DEBUG = true
+CONFIGURATION.DEBUG = false
 
 const REGION_TYPE = {
     CEBU: 'CEBU'
@@ -19,7 +19,7 @@ const RESOLUTION = {
 
 // http://10.20.30.130:8000/rtmp/calculate_topiq
 const SERVER_URL = {
-    [STREAM_TYPE.RTMP]: DEBUG
+    [STREAM_TYPE.RTMP]: CONFIGURATION.DEBUG
         ? 'http://localhost:3000/stream-quality-report/calculate_topiq'
         : 'http://10.20.30.228:3000/stream-quality-report/calculate_topiq'
 }
@@ -33,7 +33,7 @@ const SOURCE_APPEND = {
 }
 
 // */10 11-18 * * 1-5
-CONFIGURATION.CRON_TIME = DEBUG ? '*/30 * * * * *' : '*/5 * * * *'
+CONFIGURATION.CRON_TIME = CONFIGURATION.DEBUG ? '*/30 * * * * *' : '*/5 * * * *'
 
 CONFIGURATION.STREAM_LIST = [
     {

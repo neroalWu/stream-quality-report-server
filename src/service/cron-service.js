@@ -1,9 +1,15 @@
 const axios = require('axios').default
+const path = require('path')
 const ffmpeg = require('fluent-ffmpeg')
 const CONFIGURATION = require('../configuration')
 const MongoService = require('./mongo-service')
 const Logger = require('../util/logger')
 const CronJob = require('cron').CronJob
+
+if (process.platform === 'linux') {
+    const ffmpegStaticPath = path.resolve(__dirname, '../../ffmpeg-static')
+    ffmpeg.setFfmpegPath(path.join(ffmpegStaticPath, 'ffmpeg'))
+}
 
 class CronService {
     constructor() {
