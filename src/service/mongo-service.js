@@ -76,16 +76,27 @@ class MongoService {
     async createTopiqDataList(filter_list) {
         const result = Promise.all(
             filter_list.map(async (stream) => {
+                const nr_reverse_list = (await this.getFieldList(stream, 'topiq_nr')).reverse()
+                const flive_reverse_list = (
+                    await this.getFieldList(stream, 'topiq_nr-spaq')
+                ).reverse()
+                const spaq_reverse_list = (
+                    await this.getFieldList(stream, 'topiq_nr-spaq')
+                ).reverse()
+                const timestamp_reverse_list = (
+                    await this.getFieldList(stream, 'timestamp')
+                ).reverse()
+
                 return {
                     region: stream.region,
                     streamType: stream.streamType,
                     resolution: stream.resolution,
                     channel: stream.channel,
 
-                    nr_list: await this.getFieldList(stream, 'topiq_nr'),
-                    nr_flive_list: await this.getFieldList(stream, 'topiq_nr-flive'),
-                    nr_spaq_list: await this.getFieldList(stream, 'topiq_nr-spaq'),
-                    timestamp_list: await this.getFieldList(stream, 'timestamp')
+                    nr_list: nr_reverse_list,
+                    nr_flive_list: flive_reverse_list,
+                    nr_spaq_list: spaq_reverse_list,
+                    timestamp_list: timestamp_reverse_list
                 }
             })
         )

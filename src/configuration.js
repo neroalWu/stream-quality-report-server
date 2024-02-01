@@ -1,6 +1,6 @@
 const CONFIGURATION = {}
 
-CONFIGURATION.DEBUG = false
+CONFIGURATION.DEBUG = true
 
 const REGION_TYPE = {
     CEBU: 'CEBU'
