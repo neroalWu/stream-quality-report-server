@@ -58,9 +58,9 @@ class MongoService {
             }
         })
 
-        const promises = await Promise.all(summaryPromises)
+        const summarys = await Promise.all(summaryPromises)
 
-        return promises
+        return summarys
     }
 
     async GetDetails(postBody) {}
