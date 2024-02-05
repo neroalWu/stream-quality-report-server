@@ -1,18 +1,23 @@
-# API
-- get-topiq-data
-  - method: POST
-  - params: TopiqRequest
-  - return: TopiqResponse
-- get-image
-  - mtehod: POST
-  - params: ImageRequest
-  - return: ImageResponse
 
+# API
+- get-api-summary
+  - method: POST
+  - params: SummaryRequest
+  - return: SummaryResponse
+- get-api-details
+  - method: POST
+  - params: DetailRequest
+  - return: DetailResponse
+- get-api-video
+  - method: POST
+  - params: VideoRequest
+  - return: VideoResponse
 
 # Structure
 
 ## Topiq 
 <b>TopiqModel</b>
+
 ```ts
 class TopiqModel {
     public region: string,
@@ -27,70 +32,124 @@ class TopiqModel {
     public timestamp: number
 }
 ```
-- region: 地區，例如: CEBU。
-- streamType: 協定類型，例如: RTMP。
-- channel: 桌號，例如: BTCB02。
-- resolution: 解析度，例如: HD(720p)。
-- topiq_nr: 待補充。
-- topiq_nr-flive: 待補充。
-- topiq_nr-spqa: 待補充。
-- timestamp: number
+---
+## Summary
 
+<b>SummaryRequest</b>
 
-<b>TopiqRequest</b>
 ```ts
-class TopiqRequest {
+class SummaryRequest {
 	public region: string;
 	public streamType: string;
 	public resolution: string;
+	public startTime: Date;
+	public endTime: Date;
 }
 ```
-<b>TopiqData</b>
+
+<b>SummaryResponse</b>
+
 ```ts
-class TopiqData {
+class SummaryResponse {
+	public summarys: SummaryData[]
+}
+```
+
+<b>SummaryData</b>
+
+```ts
+class SummaryData {
 	public region: string;
 	public streamType: string;
 	public channel: string;
 	public resolution: string;
 
-	public nr_list: number[];
-	public nr_flive_list: number[];
-	public nr_spqa_list: number[];
+	public nr_m: number;
+	public nr_sd: number;
 
-	public timestamp_list: number[];
-}
-```
-<b>TopiqResponse</b>
-```ts
-class TopiqResponse {
-	public list: TopiqData[]
+	public flive_m: number;
+	public flive_sd: number;
+
+	public spaq_m: number;
+	public spaq_sd: number;
 }
 ```
 ---
-## Image
-<b>ImageModel</b>
+## Detail
+
+<b>DetailRequest</b>
+
 ```ts
-class ImageModel {
-  public id: string;
-  public buffer: Buffer;
+class DetailRequest {
+	public region: string;
+	public streamType: string;
+	public resolution: string;
+	public startTime: Date;
+	public endTime: Date;
 }
 ```
 
-<b>ImageRequest</b>
+<b>DetailResponse</b>
+
 ```ts
-class ImageRequest {
+class DetailResponse {
+	public details: DetailData[]
+}
+```
+
+<b>DetailData</b>
+
+```ts
+class DetailData {
 	public region: string;
 	public streamType: string;
 	public channel: string;
-	public timestamp: number;
+	public resolution: string;
+
+	public nr_m: number;
+	public nr_sd: number;
+
+	public flive_m: number;
+	public flive_sd: number;
+
+	public spaq_m: number;
+	public spaq_sd: number;
+
+	public nrs: number[];
+	public flives: number[];
+	public spaqs: number[];
+
+	public timestamps: number[];
+}
+```
+---
+
+## Video
+
+<b>VideoRequest</b>
+
+```ts
+class VideoRequest {
+	public region: string;
+	public streamType: string;
+	public resolution: string;
+	public timestamp: string;
 }
 ```
 
-<b>ImageResponse</b>
+<b>VideoResponse</b>
 
 ```ts
-class ImageResponse {
-	public src: string;
+class VideoResponse {
+	public video: VideoData;
+}
+```
+
+<b>VideoData</b>
+
+```ts
+class VideoData {
+	public videoURL: string;
 }
 ```
 
