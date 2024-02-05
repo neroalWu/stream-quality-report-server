@@ -40,39 +40,11 @@ class CronService {
 
         const queue = CONFIGURATION.STREAM_LIST.reduce(async (acc, stream) => {
             await acc
-            await this.processImage(stream)
             await this.processTopiq(stream)
             await new Promise((resolve) => setTimeout(resolve, this.delay))
         }, Promise.resolve())
 
         await queue
-    }
-
-    async processImage(streamConfig) {
-        this.logger.Log('Process Image:', streamConfig.channel)
-
-        return new Promise((resolve) => {
-            const screenShotStream = ffmpeg(`${streamConfig.source}${streamConfig.channel}`)
-                .frames(1)
-                .toFormat('image2')
-                .on('error', (error) => {
-                    this.logger.Error(`${streamConfig.channel} fail!`, error)
-                    resolve()
-                })
-                .pipe()
-
-            let buffers = []
-            screenShotStream.on('data', (chunk) => {
-                buffers.push(chunk)
-            })
-            screenShotStream.on('end', async () => {
-                const buffer = Buffer.concat(buffers)
-                const id = `${streamConfig.region}_${streamConfig.streamType}_${streamConfig.channel}_${this.timestamp}`
-                MongoService.CreateImage(id, buffer)
-
-                resolve()
-            })
-        })
     }
 
     async processTopiq(streamConfig) {

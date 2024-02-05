@@ -13,38 +13,53 @@ function handleError(res, error) {
     })
 }
 
-router.post('/get-topiq-data', async (req, res) => {
+router.post('/get-api-summary', async (req, res) => {
     try {
-        const isValid = Util.ValidPostBody(req.body, ['region', 'streamType', 'resolution'])
+        const isValid = Util.ValidPostBody(req.body, ['region', 'streamType', 'resolution', 'startTime', 'endTime'])
         if (!isValid) {
             handleError(res, 'Missing required parameters.')
             return
         }
-        const topiqDataList = await MongoService.GetTopiqDataList(req.body)
 
-        res.send({ list: topiqDataList })
+        const summarys = await MongoService.GetSummarys(req.body)
+
+        res.send({ summarys: summarys })
     } catch (error) {
-        logger.Error('error get-topiq-data', error)
+        logger.Error('error get-api-summary ', error)
         handleError(res, error)
     }
 })
 
-router.post('/get-image', async (req, res) => {
+router.post('/get-api-details', async (req, res) => {
     try {
-        const isValid = Util.ValidPostBody(req.body, ['region', 'streamType', 'channel', 'timestamp'])
+        const isValid = Util.ValidPostBody(req.body, ['region', 'streamType', 'resolution', 'startTime', 'endTime'])
         if (!isValid) {
             handleError(res, 'Missing required parameters.')
             return
         }
-        const { region, streamType, channel, timestamp } = req.body
 
-        const id = `${region}_${streamType}_${channel}_${timestamp}`
-        const base64Image = await MongoService.GetImageBase64(id)
+        const details = await MongoService.GetDetails(req.body);
 
-        res.send({ src: base64Image })
+        res.send({ details: details })
     } catch (error) {
-        logger.Error('error get-image', error)
-        console.log(error)
+        logger.Error('error get-api-details', error)
+        handleError(res, error)
+    }
+})
+
+router.post('/get-api-video', async (req, res) => {
+    try {
+        const isValid = Util.ValidPostBody(req.body, ['region', 'streamType', 'resolution', 'timestamp'])
+        if (!isValid) {
+            handleError(res, 'Missing required parameters.')
+            return
+        }
+
+        const videoURL = await VideoService.GetVideoURL(req.body);
+
+        res.send({ videoURL: videoURL })
+    } catch (error) {
+        logger.Error('error get-topiq-data', error)
         handleError(res, error)
     }
 })

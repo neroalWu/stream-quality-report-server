@@ -2,8 +2,8 @@ const mongoose = require('mongoose')
 const CONFIGURATION = require('../configuration')
 const Logger = require('../util/logger')
 
-const ImageModel = require('../model/image-model')
 const TopiqModel = require('../model/topiq-model')
+const Util = require('../util/util')
 
 class MongoService {
     constructor() {
@@ -21,9 +21,10 @@ class MongoService {
         }
     }
 
-    async GetTopiqDataList(postBody) {
-        const { region, streamType, resolution } = postBody
+    async GetSummarys(postBody) {
+        const { region, streamType, resolution, startTime, endTime } = postBody
 
+        // create filter stream
         const filterStreams = CONFIGURATION.STREAM_LIST.filter((stream) => {
             const regionMatch = region != '' ? stream.region == region : true
             const streamTypeMatch = streamType != '' ? stream.streamType == streamType : true
@@ -32,48 +33,63 @@ class MongoService {
             return regionMatch && streamTypeMatch && resolutionMatch
         })
 
-        const topiqDataList = await this.createTopiqDataList(filterStreams)
-        const validDataList = topiqDataList.filter((x) => x.timestamp_list.length > 0)
+        // get summarys from topiq db
+        const summaryPromises = filterStreams.map(async (stream) => {
+            const nr_list = await this.getFieldList(stream, 'topiq-nr', startTime, endTime)
 
-        return validDataList
+            const flive_list = await this.getFieldList(stream, 'topiq_nr-flive', startTime, endTime)
+
+            const spaq_list = await this.getFieldList(stream, 'topiq_nr-spaq', startTime, endTime)
+
+            return {
+                region: stream.region,
+                streamType: stream.streamType,
+                channel: stream.channel,
+                resolution: stream.resolution,
+
+                nr_m: Util.GetMean(nr_list),
+                nr_sd: Util.GetStandardDeviation(nr_list),
+
+                flive_m: Util.GetMean(flive_list),
+                flive_sd: Util.GetStandardDeviation(flive_list),
+
+                spaq_m: Util.GetMean(spaq_list),
+                spaq_sd: Util.GetStandardDeviation(spaq_list)
+            }
+        })
+
+        const promises = await Promise.all(summaryPromises)
+
+        return promises
     }
+
+    async GetDetails(postBody) {}
 
     async CreateTopiq(topiq) {
         TopiqModel.create(topiq)
     }
 
-    async CreateImage(id, buffer) {
-        ImageModel.create({
-            id: id,
-            buffer: buffer
-        })
-    }
-
-    async GetImageBase64(id) {
-        const imageModel = await ImageModel.findOne({ id: id })
-        return imageModel ? `data:image/png;base64,${imageModel.buffer.toString('base64')}` : ''
-    }
-
-    async getFieldList(stream, fieldName) {
+    async getFieldList(stream, fieldName, startTime, endTime) {
         try {
             const result = await TopiqModel.find({
                 region: { $eq: stream.region },
                 streamType: { $eq: stream.streamType },
                 resolution: { $eq: stream.resolution },
-                channel: { $eq: stream.channel }
+                channel: { $eq: stream.channel },
+                timestamp: { $gte: startTime, $lte: endTime }
             })
                 .sort({ _id: -1 })
                 .limit(this.limitCount)
 
             const list = result.map((topiq) => topiq[fieldName])
-            return list
+            return list.reverse()
         } catch (error) {
             this.logger.Error('get field list failed:', error)
             return []
         }
     }
 
-    async createTopiqDataList(filter_list) {
+    async getTopiqModelByRangeDate(filter_list) {
         const result = Promise.all(
             filter_list.map(async (stream) => {
                 const nr_reverse_list = (await this.getFieldList(stream, 'topiq_nr')).reverse()

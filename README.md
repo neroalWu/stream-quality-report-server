@@ -42,8 +42,8 @@ class SummaryRequest {
 	public region: string;
 	public streamType: string;
 	public resolution: string;
-	public startTime: Date;
-	public endTime: Date;
+	public startTime: number;
+	public endTime: number;
 }
 ```
 
@@ -84,8 +84,8 @@ class DetailRequest {
 	public region: string;
 	public streamType: string;
 	public resolution: string;
-	public startTime: Date;
-	public endTime: Date;
+	public startTime: number;
+	public endTime: number;
 }
 ```
 
@@ -141,14 +141,6 @@ class VideoRequest {
 
 ```ts
 class VideoResponse {
-	public video: VideoData;
-}
-```
-
-<b>VideoData</b>
-
-```ts
-class VideoData {
 	public videoURL: string;
 }
 ```
