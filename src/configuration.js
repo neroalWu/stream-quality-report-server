@@ -104,4 +104,11 @@ CONFIGURATION.STREAM_LIST = [
 
 CONFIGURATION.MONGODB_URL = 'mongodb://127.0.0.1:27017/stream-quality-report-db'
 
+CONFIGURATION.MODEL_FIELD = {
+    NR: 'topiq_nr',
+    FLIVE: 'topiq_nr-flive',
+    SPAQ: 'topiq_nr-spaq',
+    TIMESTAMP: 'timestamp',
+}
+
 module.exports = CONFIGURATION

@@ -61,7 +61,7 @@ class CronService {
             })
 
             const topiq = this.topiqParser(response)
-            MongoService.CreateTopiq(topiq)
+            MongoService.InsertTopiqModel(topiq)
         } catch (error) {
             this.logger.Error(`Process topiq error: ${streamConfig.server} ${error}`)
         }
