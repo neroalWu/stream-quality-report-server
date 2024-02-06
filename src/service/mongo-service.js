@@ -76,14 +76,14 @@ class MongoService {
                 channel: stream.channel,
                 resolution: stream.resolution,
 
-                nr_m: Util.GetMean(),
-                nr_sd: Util.GetStandardDeviation(),
+                nr_m: Util.GetMean(nrs),
+                nr_sd: Util.GetStandardDeviation(nrs),
 
-                flive_m: Util.GetMean(),
-                flive_sd: Util.GetStandardDeviation(),
+                flive_m: Util.GetMean(flives),
+                flive_sd: Util.GetStandardDeviation(flives),
 
-                spaq_m: Util.GetMean(),
-                spaq_sd: Util.GetStandardDeviation(),
+                spaq_m: Util.GetMean(spaqs),
+                spaq_sd: Util.GetStandardDeviation(spaqs),
 
                 nrs: nrs,
                 flives: flives,
