@@ -57,43 +57,46 @@ class MongoService {
         return summarys
     }
 
-    async GetDetails(postBody) {
-        const { region, streamType, resolution, startTime, endTime } = postBody
+    async GetDetail(postBody) {
+        const { region, streamType, channel, startTime, endTime } = postBody
 
-        // create filter stream
-        const filterStreams = this.getFilterStreams(region, streamType, resolution)
+        // get stream
+        const stream = CONFIGURATION.STREAM_LIST.find((stream) => {
+            const regionMatch = region != '' ? stream.region == region : true
+            const streamTypeMatch = streamType != '' ? stream.streamType == streamType : true
+            const channelMatch = channel != '' ? stream.channel == channel : true
 
-        // create detail promises
-        const detailPromises = filterStreams.map(async (stream) => {
-            const nrs = await this.getFieldList(stream, 'topiq-nr', startTime, endTime)
-            const flives = await this.getFieldList(stream, 'topiq_nr-flive', startTime, endTime)
-            const spaqs = await this.getFieldList(stream, 'topiq_nr-spaq', startTime, endTime)
-            const timestamps = await this.getFieldList(stream, 'timestamps', startTime, endTime)
-
-            return {
-                region: stream.region,
-                streamType: stream.streamType,
-                channel: stream.channel,
-                resolution: stream.resolution,
-
-                nr_m: Util.GetMean(nrs),
-                nr_sd: Util.GetStandardDeviation(nrs),
-
-                flive_m: Util.GetMean(flives),
-                flive_sd: Util.GetStandardDeviation(flives),
-
-                spaq_m: Util.GetMean(spaqs),
-                spaq_sd: Util.GetStandardDeviation(spaqs),
-
-                nrs: nrs,
-                flives: flives,
-                spaqs: spaqs,
-
-                timestamps: timestamps
-            }
+            return regionMatch && streamTypeMatch && channelMatch
         })
 
-        return await Promise.all(detailPromises)
+        const nrs = await this.getFieldList(stream, 'topiq-nr', startTime, endTime)
+        const flives = await this.getFieldList(stream, 'topiq_nr-flive', startTime, endTime)
+        const spaqs = await this.getFieldList(stream, 'topiq_nr-spaq', startTime, endTime)
+        const timestamps = await this.getFieldList(stream, 'timestamps', startTime, endTime)
+
+        const detail = {
+            region: stream.region,
+            streamType: stream.streamType,
+            channel: stream.channel,
+            resolution: stream.resolution,
+
+            nr_m: Util.GetMean(nrs),
+            nr_sd: Util.GetStandardDeviation(nrs),
+
+            flive_m: Util.GetMean(flives),
+            flive_sd: Util.GetStandardDeviation(flives),
+
+            spaq_m: Util.GetMean(spaqs),
+            spaq_sd: Util.GetStandardDeviation(spaqs),
+
+            nrs: nrs,
+            flives: flives,
+            spaqs: spaqs,
+
+            timestamps: timestamps
+        }
+
+        return detail
     }
 
     getFilterStreams(region, streamType, resolution) {

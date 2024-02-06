@@ -32,15 +32,15 @@ router.post('/get-api-summary', async (req, res) => {
 
 router.post('/get-api-details', async (req, res) => {
     try {
-        const isValid = Util.ValidPostBody(req.body, ['region', 'streamType', 'resolution', 'startTime', 'endTime'])
+        const isValid = Util.ValidPostBody(req.body, ['region', 'streamType', 'channel', 'startTime', 'endTime'])
         if (!isValid) {
             handleError(res, 'Missing required parameters.')
             return
         }
 
-        const details = await MongoService.GetDetails(req.body);
+        const detail = await MongoService.GetDetail(req.body);
 
-        res.send({ details: details })
+        res.send({ detail: detail })
     } catch (error) {
         logger.Error('error get-api-details', error)
         handleError(res, error)
