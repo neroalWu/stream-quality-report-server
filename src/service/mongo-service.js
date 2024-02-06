@@ -29,7 +29,7 @@ class MongoService {
 
         // get summarys from topiq db
         const summaryPromises = filterStreams.map(async (stream) => {
-            const nr_list = await this.getFieldList(stream, 'topiq-nr', startTime, endTime)
+            const nr_list = await this.getFieldList(stream, 'topiq_nr', startTime, endTime)
 
             const flive_list = await this.getFieldList(stream, 'topiq_nr-flive', startTime, endTime)
 
@@ -69,7 +69,7 @@ class MongoService {
             return regionMatch && streamTypeMatch && channelMatch
         })
 
-        const nrs = await this.getFieldList(stream, 'topiq-nr', startTime, endTime)
+        const nrs = await this.getFieldList(stream, 'topiq_nr', startTime, endTime)
         const flives = await this.getFieldList(stream, 'topiq_nr-flive', startTime, endTime)
         const spaqs = await this.getFieldList(stream, 'topiq_nr-spaq', startTime, endTime)
         const timestamps = await this.getFieldList(stream, 'timestamps', startTime, endTime)
