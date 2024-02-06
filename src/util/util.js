@@ -20,7 +20,7 @@ class Util {
     }
 
     GetStandardDeviation(numbers) {
-        const mean = calculateMean(numbers)
+        const mean = this.GetMean(numbers)
         const squaredDifferences = numbers.map((num) => Math.pow(num - mean, 2))
         const sumSquaredDifferences = squaredDifferences.reduce((acc, diff) => acc + diff, 0)
         const variance = sumSquaredDifferences / numbers.length
