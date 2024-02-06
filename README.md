@@ -83,6 +83,7 @@ class SummaryData {
 class DetailRequest {
 	public region: string;
 	public streamType: string;
+	public channel: string;
 	public resolution: string;
 	public startTime: number;
 	public endTime: number;
@@ -93,7 +94,7 @@ class DetailRequest {
 
 ```ts
 class DetailResponse {
-	public details: DetailData[]
+	public detail: DetailData
 }
 ```
 
