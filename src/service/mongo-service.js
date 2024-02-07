@@ -7,7 +7,6 @@ const Util = require('../util/util')
 
 class MongoService {
     constructor() {
-        this.limitCount = 20
         this.logger = new Logger('MongoService')
     }
 
@@ -123,7 +122,6 @@ class MongoService {
                 timestamp: { $gte: startTime, $lte: endTime }
             })
                 .sort({ _id: -1 })
-                .limit(this.limitCount)
 
             const list = result.map((topiq) => topiq[fieldName])
             return list.reverse()
