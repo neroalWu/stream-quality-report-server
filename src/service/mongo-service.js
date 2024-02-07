@@ -61,12 +61,16 @@ class MongoService {
 
         // get stream
         const stream = CONFIGURATION.STREAM_LIST.find((stream) => {
-            const regionMatch = region != '' ? stream.region == region : true
-            const streamTypeMatch = streamType != '' ? stream.streamType == streamType : true
-            const channelMatch = channel != '' ? stream.channel == channel : true
+            const regionMatch = region != '' ? stream.region == region : false
+            const streamTypeMatch = streamType != '' ? stream.streamType == streamType : false
+            const channelMatch = channel != '' ? stream.channel == channel : false
 
             return regionMatch && streamTypeMatch && channelMatch
         })
+
+        if (!stream) {
+            throw 'can not find stream'
+        }
 
         const nrs = await this.getFieldList(stream, CONFIGURATION.MODEL_FIELD.NR, startTime, endTime)
         const flives = await this.getFieldList(stream, CONFIGURATION.MODEL_FIELD.FLIVE, startTime, endTime)
