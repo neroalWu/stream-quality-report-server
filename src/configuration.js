@@ -2,7 +2,9 @@ const CONFIGURATION = {}
 
 CONFIGURATION.DEBUG = true
 
-CONFIGURATION.HOST_URL = CONFIGURATION.DEBUG ? 'http://localhost:3000/' : 'http://10.20.30.228:3000/'
+CONFIGURATION.HOST_URL = CONFIGURATION.DEBUG
+    ? 'http://localhost:3000/'
+    : 'http://10.20.30.228:3000/'
 
 const REGION_TYPE = {
     CEBU: 'CEBU'
@@ -35,7 +37,8 @@ const SOURCE_APPEND = {
 }
 
 // */10 11-18 * * 1-5
-CONFIGURATION.CRON_TIME = CONFIGURATION.DEBUG ? '*/30 * * * * *' : '*/5 * * * *'
+CONFIGURATION.CRON_TIME = CONFIGURATION.DEBUG ? '*/1 * * * *' : '*/10 * * * *'
+CONFIGURATION.CRON_MONTLY_CLEANUP = CONFIGURATION.DEBUG ? '*/1 * * * *' : '0 0 1 * *'
 
 CONFIGURATION.STREAM_LIST = [
     {
@@ -110,7 +113,7 @@ CONFIGURATION.MODEL_FIELD = {
     NR: 'topiq_nr',
     FLIVE: 'topiq_nr-flive',
     SPAQ: 'topiq_nr-spaq',
-    TIMESTAMP: 'timestamp',
+    TIMESTAMP: 'timestamp'
 }
 
 module.exports = CONFIGURATION
