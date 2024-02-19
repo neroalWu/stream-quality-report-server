@@ -117,7 +117,7 @@ class TopiqRecordJob {
 
     async recordVideo(streamConfig) {
         const videoSrc = streamConfig.source + streamConfig.channel
-        const outputPath = './public/videos/'
+        const outputPath = path.join(__dirname, '..', '..', 'public', 'videos/');
         const outputName = `${streamConfig.region}_${streamConfig.streamType}_${streamConfig.channel}_${this.handleTimestamp}.mp4`
 
         return new Promise((resolve) => {
