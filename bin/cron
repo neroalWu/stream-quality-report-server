@@ -7,7 +7,19 @@ const CronService = require('../src/service/cron-service')
 async function main() {
     await MongoService.Connect(CONFIGURATION.MONGODB_URL)
 
-    CronService.Init()
+    CronService.Start()
 }
+
+process.on('SIGINT', () => {
+    CronService.Stop()
+
+    process.exit()
+})
+
+process.on('SIGTERM', () => {
+    CronService.Stop()
+
+    process.exit()
+})
 
 main()
