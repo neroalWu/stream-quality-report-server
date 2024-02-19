@@ -82,7 +82,7 @@ class TopiqRecordJob {
         this.appendStreamType(destination, config)
         this.appendResolution(destination, config)
         this.appendChannel(destination, config)
-        this.appendTimestamp(destination, this.timestamp)
+        this.appendTimestamp(destination, this.handleTimestamp)
 
         return destination
     }
@@ -118,7 +118,7 @@ class TopiqRecordJob {
     async recordVideo(streamConfig) {
         const videoSrc = streamConfig.source + streamConfig.channel
         const outputPath = './public/videos/'
-        const outputName = `${streamConfig.region}_${streamConfig.streamType}_${streamConfig.channel}_${this.timestamp}.mp4`
+        const outputName = `${streamConfig.region}_${streamConfig.streamType}_${streamConfig.channel}_${this.handleTimestamp}.mp4`
 
         return new Promise((resolve) => {
             ffmpeg(videoSrc)
