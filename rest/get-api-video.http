@@ -1,9 +1,11 @@
 @host = http://localhost:3000/stream-quality-report
-POST {{host}}/get-topiq-data
+POST {{host}}/get-api-video
 Content-Type: application/json
 
 {
     "region": "CEBU",
     "streamType": "RTMP",
-    "resolution": "720p"
+    "resolution": "720p",
+    "channel": "BTCB02m",
+    "timestamp": 1708312560009
 }

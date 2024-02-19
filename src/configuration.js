@@ -2,6 +2,8 @@ const CONFIGURATION = {}
 
 CONFIGURATION.DEBUG = true
 
+CONFIGURATION.HOST_URL = CONFIGURATION.DEBUG ? 'http://localhost:3000/' : 'http://10.20.30.228:3000/'
+
 const REGION_TYPE = {
     CEBU: 'CEBU'
 }

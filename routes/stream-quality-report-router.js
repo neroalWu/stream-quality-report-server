@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const MongoService = require('../src/service/mongo-service')
+const VideoService = require('../src/service/video-service')
 const Util = require('../src/util/util')
 const Logger = require('../src/util/logger')
 
@@ -49,7 +50,7 @@ router.post('/get-api-details', async (req, res) => {
 
 router.post('/get-api-video', async (req, res) => {
     try {
-        const isValid = Util.ValidPostBody(req.body, ['region', 'streamType', 'resolution', 'timestamp'])
+        const isValid = Util.ValidPostBody(req.body, ['region', 'streamType', 'resolution', 'channel', 'timestamp'])
         if (!isValid) {
             handleError(res, 'Missing required parameters.')
             return

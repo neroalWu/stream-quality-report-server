@@ -134,6 +134,7 @@ class VideoRequest {
 	public region: string;
 	public streamType: string;
 	public resolution: string;
+	public channel: string;
 	public timestamp: string;
 }
 ```
