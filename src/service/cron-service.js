@@ -40,7 +40,7 @@ class CronService {
 
         const queue = CONFIGURATION.STREAM_LIST.reduce(async (acc, stream) => {
             await acc
-            // await this.processTopiq(stream)
+            await this.processTopiq(stream)
             await this.recordVideo(stream)
             await new Promise((resolve) => setTimeout(resolve, this.delay))
         }, Promise.resolve())
