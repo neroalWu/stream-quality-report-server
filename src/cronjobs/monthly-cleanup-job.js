@@ -1,6 +1,7 @@
 const Logger = require('../util/logger')
-
 const CronJob = require('cron').CronJob
+const MongoService = require('../service/mongo-service')
+const VideoService = require('../service/video-service')
 
 class MonthlyCleanupJob {
     constructor(cronTime) {
@@ -28,6 +29,9 @@ class MonthlyCleanupJob {
 
     HandleJob() {
         this.logger.Log('HandleJob')
+
+        MongoService.DeleteOldTopiqs()
+        VideoService.DeleteOldVideos()
     }
 }
 

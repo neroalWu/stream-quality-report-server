@@ -28,11 +28,26 @@ class MongoService {
 
         // get summarys from topiq db
         const summaryPromises = filterStreams.map(async (stream) => {
-            const nr_list = await this.getFieldList(stream, CONFIGURATION.MODEL_FIELD.NR, startTime, endTime)
+            const nr_list = await this.getFieldList(
+                stream,
+                CONFIGURATION.MODEL_FIELD.NR,
+                startTime,
+                endTime
+            )
 
-            const flive_list = await this.getFieldList(stream, CONFIGURATION.MODEL_FIELD.FLIVE, startTime, endTime)
+            const flive_list = await this.getFieldList(
+                stream,
+                CONFIGURATION.MODEL_FIELD.FLIVE,
+                startTime,
+                endTime
+            )
 
-            const spaq_list = await this.getFieldList(stream, CONFIGURATION.MODEL_FIELD.SPAQ, startTime, endTime)
+            const spaq_list = await this.getFieldList(
+                stream,
+                CONFIGURATION.MODEL_FIELD.SPAQ,
+                startTime,
+                endTime
+            )
 
             return {
                 region: stream.region,
@@ -72,10 +87,30 @@ class MongoService {
             throw 'can not find stream'
         }
 
-        const nrs = await this.getFieldList(stream, CONFIGURATION.MODEL_FIELD.NR, startTime, endTime)
-        const flives = await this.getFieldList(stream, CONFIGURATION.MODEL_FIELD.FLIVE, startTime, endTime)
-        const spaqs = await this.getFieldList(stream, CONFIGURATION.MODEL_FIELD.SPAQ, startTime, endTime)
-        const timestamps = await this.getFieldList(stream, CONFIGURATION.MODEL_FIELD.TIMESTAMP, startTime, endTime)
+        const nrs = await this.getFieldList(
+            stream,
+            CONFIGURATION.MODEL_FIELD.NR,
+            startTime,
+            endTime
+        )
+        const flives = await this.getFieldList(
+            stream,
+            CONFIGURATION.MODEL_FIELD.FLIVE,
+            startTime,
+            endTime
+        )
+        const spaqs = await this.getFieldList(
+            stream,
+            CONFIGURATION.MODEL_FIELD.SPAQ,
+            startTime,
+            endTime
+        )
+        const timestamps = await this.getFieldList(
+            stream,
+            CONFIGURATION.MODEL_FIELD.TIMESTAMP,
+            startTime,
+            endTime
+        )
 
         const detail = {
             region: stream.region,
@@ -124,8 +159,7 @@ class MongoService {
                 resolution: { $eq: stream.resolution },
                 channel: { $eq: stream.channel },
                 timestamp: { $gte: startTime, $lte: endTime }
-            })
-                .sort({ _id: -1 })
+            }).sort({ _id: -1 })
 
             const list = result.map((topiq) => topiq[fieldName])
             return list.reverse()
@@ -133,6 +167,17 @@ class MongoService {
             this.logger.Error('get field list failed:', error)
             return []
         }
+    }
+
+    DeleteOldTopiqs() {
+        this.logger.Log('DeleteOldTopiqs')
+
+        const oneMonthAgo = new Date()
+        oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1)
+
+        TopiqModel.deleteMany({
+            timestamp: { $lt: oneMonthAgo.getTime() }
+        })
     }
 }
 
