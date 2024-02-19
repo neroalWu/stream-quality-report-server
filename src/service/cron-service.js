@@ -40,7 +40,8 @@ class CronService {
 
         const queue = CONFIGURATION.STREAM_LIST.reduce(async (acc, stream) => {
             await acc
-            await this.processTopiq(stream)
+            // await this.processTopiq(stream)
+            await this.recordVideo(stream)
             await new Promise((resolve) => setTimeout(resolve, this.delay))
         }, Promise.resolve())
 
@@ -106,6 +107,27 @@ class CronService {
 
     appendTimestamp(topiq, timestamp) {
         Object.assign(topiq, { timestamp: timestamp })
+    }
+
+    async recordVideo(streamConfig) {
+        const videoSrc = streamConfig.source + streamConfig.channel
+        const outputPath = './public/videos/'
+        const outputName = `${streamConfig.region}_${streamConfig.streamType}_${streamConfig.channel}_${this.timestamp}.mp4`
+
+        return new Promise((resolve) => {
+            ffmpeg(videoSrc)
+                .format('mp4')
+                .duration(3)
+                .on('end', () => {
+                    this.logger.Log(streamConfig.channel, ' Recording finished!')
+                    resolve()
+                })
+                .on('error', (error) => {
+                    this.logger.Error(streamConfig.channel, 'Recording failed:', error)
+                    resolve()
+                })
+                .save(outputPath + outputName)
+        })
     }
 }
 

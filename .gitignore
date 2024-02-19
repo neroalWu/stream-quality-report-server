@@ -31,4 +31,6 @@ coverage
 
 __MACOSX
 
+/public/videos
+
 *.zip
