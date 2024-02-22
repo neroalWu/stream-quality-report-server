@@ -2,9 +2,7 @@ const CONFIGURATION = {}
 
 CONFIGURATION.DEBUG = true
 
-CONFIGURATION.HOST_URL = CONFIGURATION.DEBUG
-    ? 'http://localhost:3000/'
-    : 'http://10.22.0.108:3000/'
+CONFIGURATION.HOST_URL = CONFIGURATION.DEBUG ? 'http://localhost:3000/' : 'http://10.22.0.108:3000/'
 
 const REGION_TYPE = {
     CEBU: 'CEBU'
@@ -21,11 +19,10 @@ const RESOLUTION = {
     FULL_HD: '1080p'
 }
 
-// http://10.20.30.130:8000/rtmp/calculate_topiq
 const SERVER_URL = {
     [STREAM_TYPE.RTMP]: CONFIGURATION.DEBUG
-        ? 'http://localhost:3000/stream-quality-report/calculate_topiq'
-        : 'http://10.22.0.108:3000/stream-quality-report/calculate_topiq'
+        ? 'http://10.22.0.107:8000/rtmp/calculate_topiq'
+        : 'http://10.22.0.107:8000/rtmp/calculate_topiq'
 }
 
 const SOURCE_URL = {

@@ -57,26 +57,34 @@ class TopiqRecordJob {
     async recordTopiq(streamConfig) {
         this.logger.Log('Process topiq:', streamConfig.channel)
 
-        try {
-            const response = await axios.post(streamConfig.server, {
-                url: streamConfig.source,
-                duration: 3,
-                region: streamConfig.region,
-                streamType: streamConfig.streamType,
-                resolution: streamConfig.resolution,
-                channel: streamConfig.channel
-            })
-
-            const topiq = this.topiqParser(response)
-            MongoService.InsertTopiqModel(topiq)
-        } catch (error) {
-            this.logger.Error(`Process topiq error: ${streamConfig.server} ${error}`)
+        const postBody = {
+            url: streamConfig.source + streamConfig.channel,
+            duration: 3,
+            region: streamConfig.region,
+            streamType: streamConfig.streamType,
+            resolution: streamConfig.resolution,
+            channel: streamConfig.channel
         }
+
+        return new Promise(async (resolve) => {
+            try {
+                const response = await axios.post(streamConfig.server, postBody)
+
+                const topiq = this.topiqParser(response)
+                MongoService.InsertTopiqModel(topiq)
+            } catch (error) {
+                this.logger.Error(`Process topiq error: ${streamConfig.server} ${error}`)
+            } finally {
+                resolve()
+            }
+        })
     }
 
     topiqParser(source) {
         const config = JSON.parse(source.config.data)
         let destination = source.data
+
+        this.logger.Log('Source:', source)
 
         this.appendRegion(destination, config)
         this.appendStreamType(destination, config)
@@ -117,7 +125,7 @@ class TopiqRecordJob {
 
     async recordVideo(streamConfig) {
         const videoSrc = streamConfig.source + streamConfig.channel
-        const outputPath = path.join(__dirname, '..', '..', 'public', 'videos/');
+        const outputPath = path.join(__dirname, '..', '..', 'public', 'videos/')
         const outputName = `${streamConfig.region}_${streamConfig.streamType}_${streamConfig.channel}_${this.handleTimestamp}.mp4`
 
         return new Promise((resolve) => {
