@@ -1,3 +1,40 @@
+# 架構
+```
+           +-------------------+
+           |        PM2        |
+           +---------+---------+
+                     |
+          +----------+----------+ Start Service
+          |                     |
++---------+---------+ +---------+---------+
+|       cron        | |        www        |
++---------+---------+ +---------+---------+
+          |                     |
+          |                     |
+          |                     |
++---------+---------+ +---------+-----------------+
+|    CronService    | | StreamQualityReportRouter |
++-------------------+ +---------------------------+
+| TopiqRecordJob    | |/get-api-summary           |
+| MonthlyCleanupJob | |/get-api-details           |
+|                   | |/get-api-video             |
++---------+---------+ +---------+-----------------+
+          |                     |
+          +---------------------+
+          |                     |
++---------+--------+   +--------+---------+
+|   MongoService   |   |   VideoService   |
++------------------+   +------------------+
+| DB Connection    |   | Create Video URL |
+| CRUD Operation   |   | Save/Delete Video|
++------------------+   +------------------+
+
+```
+
+- StreamQualityReportRouter： 處理與串流相關的API請求。
+- CronService: 管理 cron job。
+- MongoService: 負責與MongoDB連線和操作。
+- VideoService: 負責處理影片相關操作，包括生成影片URL和刪除影片。
 
 # API
 - get-api-summary
@@ -13,27 +50,7 @@
   - params: VideoRequest
   - return: VideoResponse
 
-# Structure
-
-## Topiq 
-<b>TopiqModel</b>
-
-```ts
-class TopiqModel {
-    public region: string,
-    public streamType: string,
-    public channel: string,
-    public resolution: string,
-
-    public topiq_nr: number,
-    public "topiq_nr-flive": number,
-    public "topiq_nr-spaq": number,
-
-    public timestamp: number
-}
-```
----
-## Summary
+# 類別定義
 
 <b>SummaryRequest</b>
 
@@ -74,8 +91,6 @@ class SummaryData {
 	public spaq_sd: number;
 }
 ```
----
-## Detail
 
 <b>DetailRequest</b>
 
@@ -123,9 +138,6 @@ class DetailData {
 	public timestamps: number[];
 }
 ```
----
-
-## Video
 
 <b>VideoRequest</b>
 
@@ -147,7 +159,26 @@ class VideoResponse {
 }
 ```
 
-# Other
+# 資料庫儲存結構
+## Topiq 
+<b>TopiqModel</b>
+
+```ts
+class TopiqModel {
+    public region: string,
+    public streamType: string,
+    public channel: string,
+    public resolution: string,
+
+    public topiq_nr: number,
+    public "topiq_nr-flive": number,
+    public "topiq_nr-spaq": number,
+
+    public timestamp: number
+}
+```
+
+# 參考
 https://johnvansickle.com/ffmpeg/
 
 
